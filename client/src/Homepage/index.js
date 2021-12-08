@@ -5,7 +5,13 @@ const Homepage = () => {
   return (
     <Wrapper>
       <StartButtonDiv>
-        <NavLink to="/profile">
+        <NavLink to="/preferences">
+          <p>We will get your preferences.</p>
+          <p>Generate your own watchlist from your preferences</p>
+          <p>
+            Allow you to manage a list of recommendation and your own personal
+            watchlist
+          </p>
           <StartButton>Let's get started</StartButton>
         </NavLink>
       </StartButtonDiv>
@@ -20,6 +26,7 @@ const Wrapper = styled.div`
 `;
 const StartButton = styled.button`
   text-align: center;
+  background-color: grey;
 `;
 const StartButtonDiv = styled.div`
   margin: auto;
