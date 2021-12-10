@@ -3,22 +3,22 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import styled from "styled-components";
 import Preferences from "./Preferences/index";
 import Header from "./Header";
-import Homepage from "./Homepage/index";
-import GlobalStyles from "./Styles/GlobalStyles";
-import WatchList from "./WatchList/index";
+import Homepage from "./Homepage";
+import WatchList from "./WatchListPage/index";
 import ErrorPage from "./ErrorPage";
-import MovieById from "./Movie/MovieById";
+import MovieById from "./MovieById";
+import GlobalStyles from "./GlobalStyles";
 function App() {
   return (
     <Wrapper>
+      <GlobalStyles />
       <Router>
-        <GlobalStyles />
         <HeaderStyled />
         <Switch>
           <Route exact path="/">
             <Homepage />
           </Route>
-          <Route exact path="/preferences">
+          <Route exact path="/Preferences">
             <Preferences />
           </Route>
           <Route exact path="/WatchList">
@@ -41,8 +41,5 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const HeaderStyled = styled(Header)`
-  display: flex;
-  flex-direction: column;
-`;
+const HeaderStyled = styled(Header)``;
 export default App;

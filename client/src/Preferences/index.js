@@ -22,102 +22,98 @@ const Preferences = () => {
     // setErrMessage("");
   };
 
-  useEffect(() => {
-    const getGenres = async () => {
-      try {
-        const response = await fetch("/getGenres");
-        const body = await response.json();
-        setGenres(body.data);
-
-        setGenreLoadedStatus(true);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getGenres();
-  }, []);
+  const handleClick = async (ev) => {
+    ev.preventDefault();
+  };
   return (
     <Wrapper>
       What do you want to watch today?
-      <DropdownBoxes>
-        <MediaDropdown
-          label="mediaType"
-          htmlFor="htmlType"
-          //selection{}
-          //   handleChange={handleChange}
-          options={mediaOptions}
-        />
-        {genreLoadedStatus && (
+      <FormContainer onSubmit={handleClick}>
+        <DropdownBoxes>
+          <MediaDropdown
+            label="mediaType"
+            htmlFor="htmlType"
+            //selection{}
+            //   handleChange={handleChange}
+            options={mediaOptions}
+          />
           <GenreBox>
             <PreferencesTitle>Pick a genre:</PreferencesTitle>
-            <select onChange={handleChange} defaultValue="Select a genre">
-              <option value="Select a genre" disabled>
-                Select a genre
-              </option>
-              {genres.map((genre) => (
-                <option>{genre}</option>
-              ))}
-            </select>
+            <GenreDropdown
+              label="genre"
+              htmlFor="genre"
+              //selection{}
+              //   handleChange={handleChange}
+              options={genreOptions}
+            />
           </GenreBox>
-        )}
-        <LanguageBox>
-          <PreferencesTitle>Pick a language:</PreferencesTitle>
-          <LanguageDropdown
-            label="language"
-            htmlFor="language"
-            //selection{}
+
+          <LanguageBox>
+            <PreferencesTitle>Pick a language:</PreferencesTitle>
+            <LanguageDropdown
+              label="language"
+              htmlFor="language"
+              //selection{}
+              //   handleChange={handleChange}
+              options={languageOptions}
+            />
+          </LanguageBox>
+          <RunTimeBox>
+            <PreferencesTitle>Pick a runtime:</PreferencesTitle>
+            <RunTimeDropdown
+              label="runtime"
+              htmlFor="runtime"
+              //selection{}
+              //   handleChange={handleChange}
+              options={runtimeOptions}
+            />
+          </RunTimeBox>
+          <AgeFilterBox>
+            <PreferencesTitle>Pick an age filter:</PreferencesTitle>
+            <AgeFilterDropdown
+              label="ageFilter"
+              htmlFor="ageFilter"
+              //selection{}
+              //   handleChange={handleChange}
+              options={ageFilterOptions}
+            />
+          </AgeFilterBox>
+        </DropdownBoxes>
+        <FormInput>
+          Title:
+          <TitleInput
+            name="title"
+            type="text"
+            placeholder="Title"
             //   handleChange={handleChange}
-            options={languageOptions}
           />
-        </LanguageBox>
-        <RunTimeBox>
-          <PreferencesTitle>Pick a runtime:</PreferencesTitle>
-          <RunTimeDropdown
-            label="runtime"
-            htmlFor="runtime"
-            //selection{}
+          Director:
+          <DirectorInput
+            name="director"
+            type="text"
+            placeholder="Director"
             //   handleChange={handleChange}
-            options={runtimeOptions}
           />
-        </RunTimeBox>
-        <AgeFilterBox>
-          <PreferencesTitle>Pick an age filter:</PreferencesTitle>
-          <AgeFilterDropdown
-            label="ageFilter"
-            htmlFor="ageFilter"
-            //selection{}
+          Cast:
+          <CastInput
+            name="cast"
+            type="text"
+            placeholder="Cast"
             //   handleChange={handleChange}
-            options={ageFilterOptions}
           />
-        </AgeFilterBox>
-      </DropdownBoxes>
-      <FormInput>
-        Title:
-        <TitleInput
-          name="title"
-          type="text"
-          placeholder="Title"
-          //   handleChange={handleChange}
-        />
-        Director:
-        <DirectorInput
-          name="director"
-          type="text"
-          placeholder="Director"
-          //   handleChange={handleChange}
-        />
-        Cast:
-        <CastInput
-          name="cast"
-          type="text"
-          placeholder="Cast"
-          //   handleChange={handleChange}
-        />
-        <PlatformGrid />
-      </FormInput>
+          <PlatformGrid />
+        </FormInput>
+        <SubmitButton type="submit">Submit</SubmitButton>
+      </FormContainer>
     </Wrapper>
   );
 };
+
+const FormContainer = styled.form``;
+
+const SubmitButton = styled.button`
+  background-color: green;
+`;
 
 const Wrapper = styled.div`
   background-color: black;
@@ -139,6 +135,9 @@ const LanguageBox = styled.div`
 `;
 const PreferencesTitle = styled.div`
   font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  // border: 5px solid green;
 `;
 
 const RunTimeBox = styled.div`

@@ -1,20 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 import PlatformCheckbox from "./PlatformCheckbox";
-
+import { platformOptions } from "../../OptionSettings";
 const PlatformGrid = () => {
-  const tempPlatformArray = ["Netflix", "Amazon", "Disney+"];
   return (
     <Wrapper>
-      {tempPlatformArray?.map((platform) => {
+      {platformOptions?.map((platform) => {
         return (
           <>
             <PlatformCheckbox
-              name={platform}
-              label={platform}
+              name={platform.label}
+              label={platform.label}
+              platformName={platform.label}
               type="checkbox"
-              platformName={platform}
-              value={platform}
+              value={platform.value}
               //     onChange={(ev) => handleChange(ev.target.value, platform)}
             />
           </>
@@ -23,6 +22,8 @@ const PlatformGrid = () => {
     </Wrapper>
   );
 };
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+`;
 const PlatformDiv = styled.div``;
 export default PlatformGrid;

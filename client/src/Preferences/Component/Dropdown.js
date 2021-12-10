@@ -30,13 +30,18 @@ const Wrapper = styled.div`
   select {
     background: #fff;
     border: 1px solid #e4e8eb;
-    border-radius: 3px;
-    color: #433c71;
+    border-radius: 5px;
+    color: black;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: bold;
     height: 40px;
     padding: 0 8px;
     width: 200px;
+  }
+
+  option {
+    background: #fff;
+    color: black;
   }
 `;
 

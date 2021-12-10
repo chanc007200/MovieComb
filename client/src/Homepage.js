@@ -5,13 +5,13 @@ const Homepage = () => {
   return (
     <Wrapper>
       <StartButtonDiv>
-        <NavLink to="/preferences">
-          <p>We will get your preferences.</p>
-          <p>Generate your own watchlist from your preferences</p>
-          <p>
-            Allow you to manage a list of recommendation and your own personal
-            watchlist
-          </p>
+        <p>We will get your preferences.</p>
+        <p>Generate your own watchlist from your preferences</p>
+        <p>
+          Allow you to manage a list of recommendation and your own personal
+          watchlist
+        </p>
+        <NavLink to="/Preferences">
           <StartButton>Let's get started</StartButton>
         </NavLink>
       </StartButtonDiv>

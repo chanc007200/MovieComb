@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { MovieContext } from "../Contexts/MovieContext";
+import { MovieContext } from "./Contexts/MovieContext";
 import { NavLink } from "react-router-dom";
-const MovieThumbNail = ({ url, movieId }) => {
+const ThumbNail = ({ url, movieId }) => {
   return (
     <>
       {
@@ -18,4 +18,4 @@ const MovieImage = styled.img`
   width: 200px;
 `;
 const MovieLink = styled(NavLink)``;
-export default MovieThumbNail;
+export default ThumbNail;

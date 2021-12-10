@@ -16,7 +16,6 @@ const PlatformCheckbox = ({
         name={name}
         value={value}
         onChange={(ev) => handleChange(ev.target.value, name)}
-        checked
       />
     </Wrapper>
   );

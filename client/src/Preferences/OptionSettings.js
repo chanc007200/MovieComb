@@ -17,9 +17,47 @@ export const runtimeOptions = [
 ];
 
 export const ageFilterOptions = [
-  { value: "undefined", label: "No age filter" },
+  { value: "none", label: "No age filter" },
   { value: "PG", label: "PG" },
   { value: "PG-13", label: "PG-13" },
   { value: "PG-18", label: "PG-18" },
   { value: "R", label: "R" },
+];
+
+export const platformOptions = [
+  { value: "netflix", label: "Netflix" },
+  { value: "prime", label: "Prime" },
+  { value: "disney", label: "Disney" },
+  { value: "hbo", label: "HBO" },
+  { value: "hulu", label: "Hulu" },
+  { value: "peacock", label: "Peacock" },
+  { value: "paramount", label: "Paramount" },
+  { value: "starz", label: "Starz" },
+  { value: "showtime", label: "ShowTime" },
+  { value: "apple", label: "Apple" },
+  { value: "mubi", label: "Mubi" },
+];
+
+export const genreOptions = [
+  { value: "action", label: "Action" },
+  { value: "adventure", label: "Adventure" },
+  { value: "animation", label: "Animation" },
+  { value: "biography", label: "Biography" },
+  { value: "comedy", label: "Comedy" },
+  { value: "crime", label: "Crime" },
+  { value: "documentary", label: "Documentary" },
+  { value: "drama", label: "Drama" },
+  { value: "family", label: "Family" },
+  { value: "fantasy", label: "Fantasy" },
+  { value: "film-noir", label: "Film-Noir" },
+  { value: "history", label: "History" },
+  { value: "horror", label: "Horror" },
+  { value: "musical", label: "Musical" },
+  { value: "mystery", label: "Mystery" },
+  { value: "romance", label: "Romance" },
+  { value: "sci-fi", label: "Sci-Fi" },
+  { value: "sport", label: "Sport" },
+  { value: "thriller", label: "Thriller" },
+  { value: "war", label: "War" },
+  { value: "western", label: "Western" },
 ];

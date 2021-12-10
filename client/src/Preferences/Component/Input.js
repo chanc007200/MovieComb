@@ -34,6 +34,7 @@ const Wrapper = styled.div`
     height: 36px;
     padding: 8px 12px 10px 12px;
     width: 200px;
+    background-color: white;
 
     &::placeholder {
       color: #999;
