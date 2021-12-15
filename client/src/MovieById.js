@@ -1,91 +1,176 @@
-import React, { useContext } from "react";
-import { MovieContext } from "./Contexts/MovieContext";
+import React, { useState, useEffect, useContext } from "react";
+import { MovieTvContext } from "./Contexts/MovieTvContext";
 import { useParams } from "react-router";
 import styled from "styled-components";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { UserContext } from "./Contexts/UserContext";
 const MovieById = () => {
   const { movieId } = useParams();
-  const { myWatchList, loadedMovie } = useContext(MovieContext);
-  // const movieIdToCompare = Object.keys(myWatchList);
-  // console.log(movieIdToCompare[1]);
-  let movieObject = null;
+  const [movieObject, setMovieObject] = useState(null);
+  const [loadedMovie, setLoadedMovie] = useState(false);
+  const { userSignedIn } = useContext(UserContext);
+  const { myWatchList, setMyWatchList } = useContext(MovieTvContext);
+  const [moviePlot, setMoviePlot] = useState(null);
+  const [loadingState, setLoadingState] = useState(false);
+  const [containedTvShow, setContainedTvShow] = useState(false);
 
-  if (loadedMovie) {
-    movieObject = myWatchList.filter((movie) => {
-      const movieIdToCompare = Object.keys(movie);
+  useEffect(() => {
+    const matchMovie = async () => {
+      try {
+        const response = await fetch(`/getMovieById/${movieId}`);
+        const body = await response.json();
+        console.log(body.data[0]);
+        setLoadedMovie(true);
+        setMovieObject(body.data[0]);
+        const response2 = await fetch(`/getMovieById/plot/${movieId}`);
+        const body2 = await response2.json();
+        setMoviePlot(body2.data[0].plot);
+        console.log(body2.data[0].plot);
+      } catch (err) {
+        console.log(err.stack);
+      }
+      if (sessionStorage.getItem("SignedInUser")) {
+        const getName = sessionStorage
+          .getItem("SignedInUser")
+          .replace(/['"]+/g, "");
+        console.log(getName);
+        const response3 = await fetch(`/watchList/${getName}`);
+        const data3 = await response3.json();
+        console.log(data3);
+        const result = data3.data?.filter((movie) => {
+          return movie._id === movieId;
+        });
+        if (result.length > 0) {
+          setContainedTvShow(true);
+        }
+        console.log(data3);
+        setMyWatchList([data3.data]);
+        setLoadingState(true);
+      }
+    };
 
-      return movieIdToCompare[1] === movieId;
-    });
+    matchMovie();
+  }, []);
+
+  const addMovie = async (ev) => {
+    ev.preventDefault();
+    console.log(userSignedIn);
     console.log(movieObject);
-  }
+    const settings = {
+      method: "PUT",
+      body: JSON.stringify({ userSignedIn, movieObject }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    };
 
+    try {
+      const response = await fetch(`/addToWatchList`, settings);
+      const data = await response.json();
+      console.log(data);
+    } catch (err) {
+      console.log(err.stack);
+    }
+  };
+
+  const removeTv = async (ev) => {
+    ev.preventDefault();
+    const settings = {
+      method: "DELETE",
+      body: JSON.stringify({ userSignedIn, movieObject }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const response = await fetch(`/removeFromWatchList`, settings);
+      const data = await response.json();
+      console.log(data);
+    } catch (err) {
+      console.log(err.stack);
+    }
+  };
   return (
     <Wrapper>
-      {loadedMovie && movieObject.length === 1 ? (
+      {loadedMovie && movieObject ? (
         <>
-          <MovieBanner
-            style={{
-              backgroundImage: `url(${movieObject[0][movieId].title.image.url}`,
-            }}
-          ></MovieBanner>
-
           <MovieContainer>
             <MoviePosterDiv>
-              <MoviePoster src={movieObject[0][movieId].title.image.url} />
+              <MoviePoster src={movieObject?.title.image.url} />
             </MoviePosterDiv>
             <div>
-              <MovieTitle>{movieObject[0][movieId].title.title}</MovieTitle>
+              <MovieTitle>{movieObject?.title.title}</MovieTitle>
               <MovieInfo>
-                <GenericDiv>{movieObject[0][movieId].ratings.year}</GenericDiv>
-                <GenericDiv>
-                  {movieObject[0][movieId].popularity.titleType}
-                </GenericDiv>
-                <GenericDiv>
-                  {movieObject[0][movieId].title.runningTimeInMinutes}m
-                </GenericDiv>
+                <GenericDiv>{movieObject?.ratings.year}</GenericDiv>
+                <GenericDiv>{movieObject?.popularity.titleType}</GenericDiv>
+                {movieObject?.title["runningTimeInMinutes"] !== undefined ? (
+                  <GenericDiv>
+                    {movieObject?.title.runningTimeInMinutes} minutes
+                  </GenericDiv>
+                ) : null}
               </MovieInfo>
+              <MoviePlot>{moviePlot}</MoviePlot>
             </div>
           </MovieContainer>
           <div>
-            <MovieRatings>
-              <MovieDetails>Ratings:</MovieDetails>
+            {movieObject?.ratings["rating"] == undefined &&
+            movieObject?.metacritic.reviewCount === 0 ? null : (
+              <MovieRatings>
+                <MovieDetails>Ratings:</MovieDetails>
 
-              {movieObject[0][movieId].ratings.ratingCount > 0 ? (
-                <>
-                  <span>IMDB Rating</span>
-                  <span> {movieObject[0][movieId].ratings.rating}</span>
-                </>
-              ) : null}
-              {movieObject[0][movieId].ratings.reviewCount > 0 ? (
-                <>
-                  <span>Metacritic Rating </span>
-                  <span>movieObject[0][movieId].metacritic.metaScore</span>
-                </>
-              ) : null}
-            </MovieRatings>
+                {movieObject?.ratings.ratingCount > 0 ? (
+                  <>
+                    <span>IMDB Rating</span>
+                    <span> {movieObject?.ratings.rating}</span>
+                  </>
+                ) : null}
+                {movieObject?.ratings.reviewCount > 0 ? (
+                  <>
+                    <span>Metacritic Rating </span>
+                    <span>{movieObject?.metacritic.metaScore}</span>
+                  </>
+                ) : null}
+              </MovieRatings>
+            )}
 
             <MovieGenresDiv>
               <MovieDetails>Genres:</MovieDetails>
 
-              {movieObject[0][movieId].genres.map((element) => {
+              {movieObject?.genres.map((element) => {
                 return element + " ";
               })}
             </MovieGenresDiv>
-
-            <MoviesWayToWatch>
-              <MovieDetails>Watch On:</MovieDetails>
-              {movieObject[0][
-                movieId
-              ].waysToWatch.optionGroups[0].watchOptions.map((platform) => {
-                return platform.primaryText + " ";
-              })}
-            </MoviesWayToWatch>
-            <MovieDetails>
-              Age Rating: {movieObject[0][movieId].certificate}
-            </MovieDetails>
+            {"watchOptions" in movieObject && (
+              <MoviesWayToWatch>
+                <MovieDetails>Watch On:</MovieDetails>
+                {movieObject?.waysToWatch.optionGroups[0].watchOptions.map(
+                  (platform) => {
+                    return platform.primaryText + " ";
+                  }
+                )}
+              </MoviesWayToWatch>
+            )}
+            {movieObject?.certificate !== null ? (
+              <MovieDetails>
+                Age Rating: {movieObject?.certificate}
+              </MovieDetails>
+            ) : null}
           </div>
+          {userSignedIn && (
+            <ButtonWatchList onClick={addMovie}>
+              Add to WatchList
+            </ButtonWatchList>
+          )}
+          {userSignedIn && containedTvShow === true && (
+            <ButtonWatchList onClick={removeTv}>
+              Remove From WatchList
+            </ButtonWatchList>
+          )}
         </>
       ) : (
-        <ErrorMessage>No Movie was found with this id</ErrorMessage>
+        <CircularProgress></CircularProgress>
       )}
     </Wrapper>
   );
@@ -94,7 +179,7 @@ const MovieById = () => {
 const GenericDiv = styled.div`
   padding: 5px;
 `;
-const ErrorMessage = styled.div``;
+
 const MovieTitle = styled.span`
   font-size: 50px;
   color: white;
@@ -102,6 +187,7 @@ const MovieTitle = styled.span`
 const Wrapper = styled.div`
   background-color: black;
   height: 100vh;
+  margin-left: 15px;
 `;
 const MoviePoster = styled.img`
   width: 345px;
@@ -131,11 +217,18 @@ const MovieDetails = styled.span`
   font-size: 25px;
 `;
 const MovieBanner = styled.div`
-  width: 100%;
+  width: 85vw;
   height: 25vh;
-  object-fit: cover;
+  background-repeat: no-repeat;
+  border: solid red 5px;
 `;
 const MovieContainer = styled.div`
   display: flex;
+`;
+const ButtonWatchList = styled.button`
+  background-color: green;
+`;
+const MoviePlot = styled.div`
+  margin-top: 5vh;
 `;
 export default MovieById;

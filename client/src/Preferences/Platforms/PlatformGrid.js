@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PlatformCheckbox from "./PlatformCheckbox";
-import { platformOptions } from "../../OptionSettings";
+import { platformOptions } from "../OptionSettings";
 const PlatformGrid = () => {
   return (
     <Wrapper>

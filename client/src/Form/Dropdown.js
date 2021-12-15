@@ -8,18 +8,31 @@ const Dropdown = ({ label, htmlFor, selection, handleChange, options }) => {
       <select
         value={selection}
         onChange={(ev) => handleChange(ev.target.value, htmlFor)}
+        // defaultValue={options[0]}
       >
+        {
+          //  options[0].value === "undefined"
+          // <option value={options[0]} disabled></option>
+        }
+
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
+          <>
+            {option.value !== "undefined" ? (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ) : (
+              <option key={option.value} value={option.value} disabled>
+                {option.label}
+              </option>
+            )}
+          </>
         ))}
       </select>
     </Wrapper>
   );
 };
 
-//Change this
 const Wrapper = styled.div`
   margin-bottom: 6px;
 

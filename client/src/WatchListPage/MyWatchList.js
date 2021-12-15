@@ -1,31 +1,65 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { MovieContext } from "../Contexts/MovieContext";
 import ThumbNail from "../ThumbNail";
+import { MovieTvContext } from "../Contexts/MovieTvContext";
 
 const WatchListPage = () => {
-  const { myWatchList, setMyWatchList, loadedMovie, setLoadedMovie } =
-    useContext(MovieContext);
+  const { myWatchList, setMyWatchList } = useContext(MovieTvContext);
+  const [loadingState, setLoadingState] = useState(false);
+
+  useEffect(() => {
+    const getWatchList = async () => {
+      if (sessionStorage.getItem("SignedInUser")) {
+        const getName = sessionStorage
+          .getItem("SignedInUser")
+          .replace(/['"]+/g, "");
+        console.log(getName);
+        const response = await fetch(`/watchList/${getName}`);
+        const data = await response.json();
+        console.log(data);
+        setMyWatchList([data.data]);
+        setLoadingState(true);
+      }
+    };
+    getWatchList();
+  }, []);
 
   console.log(myWatchList);
-
+  console.log(loadingState);
   return (
-    <Wrapper>
-      <MyWatchListTitlte>My WatchList</MyWatchListTitlte>
-      <MyList>
-        {loadedMovie &&
-          myWatchList?.map((movie) => {
-            const movieId = Object.keys(movie);
-            console.log(movieId);
-            return (
-              <ThumbNail
-                url={movie[movieId[1]].title.image.url}
-                movieId={movieId[1]}
-              />
-            );
-          })}
-      </MyList>
-    </Wrapper>
+    <>
+      {myWatchList && loadingState && (
+        <Wrapper>
+          <MyWatchListTitle>My WatchList</MyWatchListTitle>
+          <MyList>
+            {myWatchList[0]?.map((movieTv) => {
+              const titleType = movieTv.title.titleType;
+              console.log(titleType);
+              {
+                if (titleType === "movie") {
+                  return (
+                    <ThumbNail
+                      url={movieTv?.title.image.url}
+                      movieId={movieTv?._id}
+                      tvId={null}
+                    />
+                  );
+                } else {
+                  return (
+                    <ThumbNail
+                      url={movieTv?.title.image.url}
+                      tvId={movieTv?._id}
+                      movieId={null}
+                    />
+                  );
+                }
+              }
+            })}
+          </MyList>
+        </Wrapper>
+      )}
+      {myWatchList.length === 0 && <p>No watchlist</p>}
+    </>
   );
 };
 const Wrapper = styled.div`
@@ -39,7 +73,11 @@ const MyList = styled.div`
   width: 100vw;
 `;
 
-const MyWatchListTitlte = styled.div`
+const MyWatchListTitle = styled.div`
   font-size: 3vh;
+`;
+const Spacing = styled.div`
+  margin-top: 50px;
+  margin-left: 50px;
 `;
 export default WatchListPage;

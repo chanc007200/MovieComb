@@ -8,6 +8,10 @@ import WatchList from "./WatchListPage/index";
 import ErrorPage from "./ErrorPage";
 import MovieById from "./MovieById";
 import GlobalStyles from "./GlobalStyles";
+import TvById from "./TvById";
+import SignUp from "./User/SignUp";
+import SignIn from "./User/SignIn";
+
 function App() {
   return (
     <Wrapper>
@@ -26,6 +30,15 @@ function App() {
           </Route>
           <Route exact path="/Movie/:movieId">
             <MovieById />
+          </Route>
+          <Route exact path="/TvShow/:tvId">
+            <TvById />
+          </Route>
+          <Route exact path="/SignUp">
+            <SignUp />
+          </Route>
+          <Route exact path="/SignIn">
+            <SignIn />
           </Route>
           <Route path="">
             <ErrorPage />

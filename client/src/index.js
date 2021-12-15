@@ -1,12 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import { MovieProvider } from "./Contexts/MovieContext";
+import { MovieTvProvider } from "./Contexts/MovieTvContext";
+import { UserProvider } from "./Contexts/UserContext";
 ReactDOM.render(
   <React.StrictMode>
-    <MovieProvider>
-      <App />
-    </MovieProvider>
+    <UserProvider>
+      <MovieTvProvider>
+        <App />
+      </MovieTvProvider>
+    </UserProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

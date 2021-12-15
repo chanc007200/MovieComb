@@ -11,15 +11,19 @@ export const languageOptions = [
 ];
 
 export const runtimeOptions = [
+  { value: "undefined", label: "Run Time" },
+  { value: "no specified", label: "No specified Run Time" },
   { value: "lessHour", label: "Less than 60 minutes" },
   { value: "hourToTwo", label: "60 minutes to 120 minutes" },
   { value: "moretwoHours", label: "More than 120 minutes" },
 ];
 
 export const ageFilterOptions = [
-  { value: "none", label: "No age filter" },
+  { value: "undefined", label: "Age" },
+  { value: "no age filter", label: "No age filter" },
+  { value: "G", label: "G" },
   { value: "PG", label: "PG" },
-  { value: "PG-13", label: "PG-13" },
+  { value: "PG-14", label: "PG-14" },
   { value: "PG-18", label: "PG-18" },
   { value: "R", label: "R" },
 ];
@@ -39,6 +43,7 @@ export const platformOptions = [
 ];
 
 export const genreOptions = [
+  { value: "undefined", label: "Genre" },
   { value: "action", label: "Action" },
   { value: "adventure", label: "Adventure" },
   { value: "animation", label: "Animation" },
