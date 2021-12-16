@@ -214,28 +214,17 @@ const MovieYear = styled.div`
 const MovieInfo = styled.div`
   display: flex;
 `;
-const MovieType = styled.div`
-  padding: 5px;
-`;
-const MovieRunTime = styled.div`
-  padding: 5px;
-`;
+
 const MovieRatings = styled.div``;
-const MovieImdbRating = styled.div``;
 
 const MovieGenresDiv = styled.div``;
-const MovieMetacriticRating = styled.div``;
+
 const MoviesWayToWatch = styled.div``;
 
 const MovieDetails = styled.span`
   font-size: 25px;
 `;
-const MovieBanner = styled.div`
-  width: 85vw;
-  height: 25vh;
-  background-repeat: no-repeat;
-  border: solid red 5px;
-`;
+
 const MovieContainer = styled.div`
   display: flex;
 `;

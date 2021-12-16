@@ -104,14 +104,14 @@ const Preferences = () => {
     }
 
     // if (formData.Netflix === true) {
-    //   newTvArray = tvArray.filter((tvShow) => {
-    //     tvShow.map((option) => {
-    //       return option.watchOptions.map((op) => {
-    //         return <>{op.primaryText}</>;
+    //   newTvArray = tvArray.map((tvShow) => {
+    //       return tvShow.waysToWatch.watchOptions.optionGroups.filter((opt) => {
+
+    //       //  return "Netflix"==={opt.watchOptions.primaryText}
     //       });
     //     });
     //   });
-    // }
+    //}
 
     setFilteredMovies(newMovieArray);
     setFilteredTvShows(newTvArray);
@@ -255,16 +255,10 @@ const RunTimeDropdown = styled(Dropdown)``;
 const AgeFilterBox = styled.div`
   margin-right: 1vw;
 `;
-const Rating = styled.div`
-  margin-right: 2vw;
-  border: 5px solid green;
-`;
+
 const AgeFilterDropdown = styled(Dropdown)``;
 
-const FormInput = styled.form``;
 const TitleInput = styled(Input)``;
-const DirectorInput = styled(Input)``;
-const CastInput = styled(Input)``;
 
 const DropdownBoxes = styled.div`
   display: flex;
@@ -273,10 +267,6 @@ const DropdownBoxes = styled.div`
 const SuggestionGridDiv = styled.div`
   height: 70vh;
   width: 100%;
-`;
-const ReleaseYear = styled.div`
-  margin-right: 2vw;
-  border: 5px solid green;
 `;
 
 export default Preferences;

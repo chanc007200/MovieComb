@@ -8,7 +8,12 @@ const Homepage = () => {
   return (
     <Wrapper>
       {sessionStorage.getItem("SignedInUser") ? (
-        <StyledMyWatchList />
+        <Container>
+          <StyledMyWatchList />
+          <TextDiv>
+            You can continue to edit your watchlist in the browse tab
+          </TextDiv>
+        </Container>
       ) : (
         <>
           <StartButtonDiv>
@@ -26,9 +31,11 @@ const Homepage = () => {
     </Wrapper>
   );
 };
-
+const Container = styled.div`
+  height: 300px;
+`;
 const StyledMyWatchList = styled(MyWatchList)``;
-
+const TextDiv = styled.div``;
 const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;

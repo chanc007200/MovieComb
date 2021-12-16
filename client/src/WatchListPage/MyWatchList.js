@@ -73,8 +73,4 @@ const MyList = styled.div`
 const MyWatchListTitle = styled.div`
   font-size: 3vh;
 `;
-const Spacing = styled.div`
-  margin-top: 50px;
-  margin-left: 50px;
-`;
 export default WatchListPage;

@@ -36,13 +36,12 @@ const Wrapper = styled.div`
 
   select {
     background: #fff;
-    border: 1px solid #e4e8eb;
+    border: 1px solid #fff;
     border-radius: 5px;
     color: black;
     font-size: 15px;
     font-weight: bold;
     height: 40px;
-    padding: 0 8px;
     width: 200px;
   }
 

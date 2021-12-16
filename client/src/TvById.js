@@ -206,23 +206,15 @@ const TvPoster = styled.img`
   height: 512px;
 `;
 const TvPosterDiv = styled.div``;
-const TvYear = styled.div`
-  padding: 5px;
-`;
+
 const TvInfo = styled.div`
   display: flex;
 `;
-const TvType = styled.div`
-  padding: 5px;
-`;
-const TvRunTime = styled.div`
-  padding: 5px;
-`;
+
 const TvRatings = styled.div``;
-const TvImdbRating = styled.div``;
 
 const TvGenresDiv = styled.div``;
-const TvMetacriticRating = styled.div``;
+
 const TvWayToWatch = styled.div`
   display: flex;
 `;
@@ -230,12 +222,7 @@ const TvWayToWatch = styled.div`
 const TvDetails = styled.span`
   font-size: 20px;
 `;
-const TvBanner = styled.div`
-  width: 85vw;
-  height: 25vh;
-  background-repeat: no-repeat;
-  border: solid red 5px;
-`;
+
 const TvContainer = styled.div`
   display: flex;
 `;

@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
-import { MovieTvContext } from "./Contexts/MovieTvContext";
 import { NavLink } from "react-router-dom";
 const ThumbNail = ({ url, movieId, tvId }) => {
   return (
