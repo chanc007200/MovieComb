@@ -19,12 +19,12 @@ const ThumbNail = ({ url, movieId, tvId }) => {
 };
 const MovieImage = styled.img`
   height: 200px;
-  width: 200px;
+  width: 10%;
 `;
 const MovieLink = styled(NavLink)``;
 const TvImage = styled.img`
   height: 200px;
-  width: 200px;
+  width: 10%;
 `;
 const TvLink = styled(NavLink)``;
 export default ThumbNail;

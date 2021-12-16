@@ -67,15 +67,46 @@ const addToWatchList = async (req, res) => {
 
 const removeFromWatchList = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-  console.log("blah", req.body);
-  let result = null;
+  let checkWatchList = null;
   try {
     await client.connect();
     const db = client.db("MovieComb");
     const result = await db
       .collection("Users")
-      .find({ name: req.body.userSignedIn, _id: req.body._id });
-    console.log(result);
+      .find({ name: req.body.userSignedIn })
+      .toArray();
+    console.log("result", result);
+
+    if (result.length > 0) {
+      if (req.body.tvObject) {
+        checkWatchList = result[0].watchlist.find((movietv) => {
+          return movietv._id === req.body.tvObject._id;
+        });
+      }
+      if (req.body.movieObject) {
+        checkWatchList = result[0].watchlist.find((movietv) => {
+          return movietv._id === req.body.movieObject._id;
+        });
+      }
+      console.log("hey", checkWatchList);
+      if (checkWatchList) {
+        await db.collection("Users").updateOne(
+          { name: req.body.userSignedIn },
+          {
+            $pull: {
+              watchlist: { _id: checkWatchList._id },
+            },
+          }
+        );
+        return res.status(200).json({ status: 200, data: "deleted" });
+      }
+      return res.status(204).json({
+        status: 204,
+        data: "couldn't find movie/tv in user's watchlist to delete from",
+      });
+    } else {
+      return res.status(204).json({ status: 204, data: "couldn't find user" });
+    }
   } catch (err) {
     console.log(err.stack);
   } finally {
@@ -88,8 +119,14 @@ const getInitialSetup = async (req, res) => {
   try {
     await client.connect();
     const db = client.db("MovieComb");
-    const randomMovies = await db.collection("Top100Movies").find().toArray();
-    const randomTvShows = await db.collection("Top100TvShows").find().toArray();
+    const randomMovies = await db
+      .collection("Top100Movies")
+      .aggregate([{ $sample: { size: 50 } }])
+      .toArray();
+    const randomTvShows = await db
+      .collection("Top100TvShows")
+      .aggregate([{ $sample: { size: 50 } }])
+      .toArray();
     if (randomMovies && randomTvShows) {
       result.push(randomTvShows, randomMovies);
       return res.status(200).json({ status: 200, data: result });

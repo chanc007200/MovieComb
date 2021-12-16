@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PlatformCheckbox from "./PlatformCheckbox";
 import { platformOptions } from "../OptionSettings";
-const PlatformGrid = () => {
+const PlatformGrid = ({ handleChange }) => {
   return (
     <Wrapper>
       {platformOptions?.map((platform) => {
@@ -14,7 +14,7 @@ const PlatformGrid = () => {
               platformName={platform.label}
               type="checkbox"
               value={platform.value}
-              //     onChange={(ev) => handleChange(ev.target.value, platform)}
+              handleChange={handleChange}
             />
           </>
         );

@@ -8,13 +8,7 @@ const Dropdown = ({ label, htmlFor, selection, handleChange, options }) => {
       <select
         value={selection}
         onChange={(ev) => handleChange(ev.target.value, htmlFor)}
-        // defaultValue={options[0]}
       >
-        {
-          //  options[0].value === "undefined"
-          // <option value={options[0]} disabled></option>
-        }
-
         {options.map((option) => (
           <>
             {option.value !== "undefined" ? (

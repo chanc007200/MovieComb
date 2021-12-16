@@ -6,10 +6,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 const { REACT_APP_API_KEY } = process.env;
 require("dotenv").config();
 
-const SuggestionGrid = () => {
-  const { formData, setFormData } = useContext(MovieTvContext);
-  const [movieArray, setMovieArray] = useState([]);
-  const [tvArray, setTvArray] = useState([]);
+const SuggestionGrid = ({ movieArray, tvArray, setMovieArray, setTvArray }) => {
+  const { formData, setFormData, isUpdated } = useContext(MovieTvContext);
   const [loadedPreferences, setLoadedPreferences] = useState(false);
 
   useEffect(() => {
@@ -26,11 +24,8 @@ const SuggestionGrid = () => {
       }
     };
     initialSetup();
-  }, []);
+  }, [isUpdated]);
 
-  console.log(formData);
-  console.log(tvArray);
-  console.log(movieArray);
   return (
     <>
       {loadedPreferences ? (

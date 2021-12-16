@@ -109,8 +109,9 @@ const ConfirmButton = styled.button`
 const ErrorMessageBox = styled.div`
   height: 50px;
   width: 200px;
-  border: 5px solid yellow;
+  // border: 5px solid yellow;
   color: white;
+  font-size: 17px;
 `;
 const FormContainer = styled.form``;
 const FormDiv = styled.div`

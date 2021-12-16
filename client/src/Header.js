@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "./Contexts/UserContext";
+import logo from "./images/Red-Play-Button-PNG-Image.png";
 const Header = () => {
   const { userSignedIn, setUserSignedIn } = useContext(UserContext);
 
@@ -12,10 +13,13 @@ const Header = () => {
   return (
     <Wrapper>
       <NavLink to="/" style={{ textDecoration: "none" }}>
-        <WebsiteLogo>MovieComb</WebsiteLogo>
+        <WebsiteLogo>
+          <Logo src={logo} />
+          <LogoText>MovieComb</LogoText>
+        </WebsiteLogo>
       </NavLink>
-      <NavLink to="/Preferences" style={{ textDecoration: "none" }}>
-        <PreferencesLink>Preferences</PreferencesLink>
+      <NavLink to="/Browse" style={{ textDecoration: "none" }}>
+        <PreferencesLink>Browse</PreferencesLink>
       </NavLink>
       <NavLink to="/Watchlist" style={{ textDecoration: "none" }}>
         <WatchListLink>WatchList</WatchListLink>
@@ -32,7 +36,7 @@ const Header = () => {
       ) : (
         <>
           <UserSection>
-            Welcome {userSignedIn}
+            <WelcomeUser>Welcome {userSignedIn}</WelcomeUser>
             <SignOutDiv onClick={handleClick}>Sign out</SignOutDiv>
           </UserSection>
         </>
@@ -40,33 +44,66 @@ const Header = () => {
     </Wrapper>
   );
 };
-const WebsiteLogo = styled.div`
-  margin-right: 2vw;
+
+const LogoText = styled.div`
+  width: 10px;
 `;
+const Logo = styled.img`
+  max-height: 100%;
+  width: 20px;
+  margin-top: 5px;
+`;
+const WebsiteLogo = styled.button`
+  margin-right: 2vw;
+  font-size: 25px;
+  margin-left: 10px;
+  height: 35px;
+  width: 165px;
+  display: flex;
+`;
+
 const Wrapper = styled.div`
-  color: red;
   display: flex;
   margin-bottom: 5vh;
-  border: 5px solid red;
   position: relative;
+  background: black;
+  height: 30px;
+  font-size: 25px;
+  margin-top: 10px;
 `;
-const PreferencesLink = styled.div`
+const PreferencesLink = styled.button`
   margin-right: 2vw;
+  font-size: 25px;
 `;
-const WatchListLink = styled.div`
+const WatchListLink = styled.button`
   margin-right: 2vw;
+  font-size: 25px;
 `;
 const UserSection = styled.div`
   right: 0;
   position: absolute;
   display: flex;
+  font-size: 25px;
 `;
 const SignInDiv = styled.div`
   margin-right: 2vw;
 `;
-const SignUpDiv = styled.div``;
+const SignUpDiv = styled.div`
+  margin-right: 15px;
+  background-color: transparent;
+  border: none;
+  font-size: 25px;
+  cursor: pointer;
+`;
 const SignOutDiv = styled.div`
-  margin-left: 15px;
+  margin-right: 15px;
+  background-color: transparent;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+`;
+const WelcomeUser = styled.div`
+  margin-right: 15px;
   background-color: transparent;
   border: none;
   font-size: 15px;

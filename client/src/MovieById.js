@@ -12,7 +12,7 @@ const MovieById = () => {
   const { myWatchList, setMyWatchList } = useContext(MovieTvContext);
   const [moviePlot, setMoviePlot] = useState(null);
   const [loadingState, setLoadingState] = useState(false);
-  const [containedTvShow, setContainedTvShow] = useState(false);
+  const [containedMovie, setContainedMovie] = useState(false);
 
   useEffect(() => {
     const matchMovie = async () => {
@@ -41,7 +41,7 @@ const MovieById = () => {
           return movie._id === movieId;
         });
         if (result.length > 0) {
-          setContainedTvShow(true);
+          setContainedMovie(true);
         }
         console.log(data3);
         setMyWatchList([data3.data]);
@@ -69,12 +69,15 @@ const MovieById = () => {
       const response = await fetch(`/addToWatchList`, settings);
       const data = await response.json();
       console.log(data);
+      if (data.data.modifiedCount === 1) {
+        setContainedMovie(true);
+      }
     } catch (err) {
       console.log(err.stack);
     }
   };
 
-  const removeTv = async (ev) => {
+  const removeMovie = async (ev) => {
     ev.preventDefault();
     const settings = {
       method: "DELETE",
@@ -88,10 +91,15 @@ const MovieById = () => {
       const response = await fetch(`/removeFromWatchList`, settings);
       const data = await response.json();
       console.log(data);
+      if (data.data === "deleted") {
+        setContainedMovie(false);
+      }
     } catch (err) {
       console.log(err.stack);
     }
   };
+
+  const drm = movieObject?.waysToWatch.optionGroups;
   return (
     <Wrapper>
       {loadedMovie && movieObject ? (
@@ -102,6 +110,16 @@ const MovieById = () => {
             </MoviePosterDiv>
             <div>
               <MovieTitle>{movieObject?.title.title}</MovieTitle>
+              {userSignedIn && containedMovie === false && (
+                <ButtonWatchList onClick={addMovie}>
+                  Add to WatchList
+                </ButtonWatchList>
+              )}
+              {userSignedIn && containedMovie === true && (
+                <ButtonWatchList onClick={removeMovie}>
+                  Remove From WatchList
+                </ButtonWatchList>
+              )}
               <MovieInfo>
                 <GenericDiv>{movieObject?.ratings.year}</GenericDiv>
                 <GenericDiv>{movieObject?.popularity.titleType}</GenericDiv>
@@ -142,32 +160,24 @@ const MovieById = () => {
                 return element + " ";
               })}
             </MovieGenresDiv>
-            {"watchOptions" in movieObject && (
+            {
               <MoviesWayToWatch>
-                <MovieDetails>Watch On:</MovieDetails>
-                {movieObject?.waysToWatch.optionGroups[0].watchOptions.map(
-                  (platform) => {
-                    return platform.primaryText + " ";
-                  }
-                )}
+                <WatchTitle>Watch Now:</WatchTitle>
+                <WatchMap>
+                  {drm?.map((option) => {
+                    return option.watchOptions.map((op) => {
+                      return <WatchMedia>{op.primaryText}</WatchMedia>;
+                    });
+                  })}
+                </WatchMap>
               </MoviesWayToWatch>
-            )}
+            }
             {movieObject?.certificate !== null ? (
               <MovieDetails>
                 Age Rating: {movieObject?.certificate}
               </MovieDetails>
             ) : null}
           </div>
-          {userSignedIn && (
-            <ButtonWatchList onClick={addMovie}>
-              Add to WatchList
-            </ButtonWatchList>
-          )}
-          {userSignedIn && containedTvShow === true && (
-            <ButtonWatchList onClick={removeTv}>
-              Remove From WatchList
-            </ButtonWatchList>
-          )}
         </>
       ) : (
         <CircularProgress></CircularProgress>
@@ -175,7 +185,15 @@ const MovieById = () => {
     </Wrapper>
   );
 };
-
+const WatchTitle = styled.div`
+  font-size: 20px;
+`;
+const WatchMap = styled.div`
+  display: flex;
+`;
+const WatchMedia = styled.div`
+  margin-right: 5px;
+`;
 const GenericDiv = styled.div`
   padding: 5px;
 `;
@@ -183,6 +201,7 @@ const GenericDiv = styled.div`
 const MovieTitle = styled.span`
   font-size: 50px;
   color: white;
+  margin-right: 20px;
 `;
 const Wrapper = styled.div`
   background-color: black;

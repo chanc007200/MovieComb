@@ -51,7 +51,7 @@ const MovieById = () => {
 
     matchTv();
   }, []);
-
+  console.log(tvObject);
   const addTv = async (ev) => {
     ev.preventDefault();
     console.log(userSignedIn);
@@ -69,6 +69,9 @@ const MovieById = () => {
       const response = await fetch(`/addToWatchList`, settings);
       const data = await response.json();
       console.log(data);
+      if (data.data.modifiedCount === 1) {
+        setContainedTvShow(true);
+      }
     } catch (err) {
       console.log(err.stack);
     }
@@ -87,6 +90,9 @@ const MovieById = () => {
       const response = await fetch(`/removeFromWatchList`, settings);
       const data = await response.json();
       console.log(data);
+      if (data.data === "deleted") {
+        setContainedTvShow(false);
+      }
     } catch (err) {
       console.log(err.stack);
     }
@@ -94,7 +100,8 @@ const MovieById = () => {
 
   console.log(myWatchList);
   console.log(containedTvShow);
-
+  const drm = tvObject?.waysToWatch.optionGroups;
+  console.log(drm);
   return (
     <Wrapper>
       {loadedTv && tvObject ? (
@@ -105,6 +112,17 @@ const MovieById = () => {
             </TvPosterDiv>
             <div>
               <TvTitle>{tvObject?.title.title}</TvTitle>
+              {userSignedIn && containedTvShow === false && (
+                <ButtonWatchList onClick={addTv}>
+                  Add to WatchList
+                </ButtonWatchList>
+              )}
+              {userSignedIn && containedTvShow === true && (
+                <ButtonWatchList onClick={removeTv}>
+                  Remove From WatchList
+                </ButtonWatchList>
+              )}
+
               <TvInfo>
                 <GenericDiv>{tvObject?.ratings.year}</GenericDiv>
                 <GenericDiv>{tvObject?.popularity.titleType}</GenericDiv>
@@ -144,28 +162,24 @@ const MovieById = () => {
                 return element + " ";
               })}
             </TvGenresDiv>
-            {"watchOptions" in tvObject && (
+            {
               <TvWayToWatch>
-                <TvDetails>Watch On:</TvDetails>
-                {tvObject?.waysToWatch.optionGroups[0].watchOptions?.map(
-                  (platform) => {
-                    return platform.primaryText + " ";
-                  }
-                )}
+                <WatchTitle>Watch Now:</WatchTitle>
+                <WatchMap>
+                  {drm?.map((option) => {
+                    return option.watchOptions.map((op) => {
+                      return <WatchMedia>{op.primaryText}</WatchMedia>;
+                    });
+                  })}
+                </WatchMap>
               </TvWayToWatch>
-            )}
+            }
             {tvObject?.certificate !== null ? (
-              <TvDetails>Age Rating: {tvObject?.certificate}</TvDetails>
+              <TvDetails>
+                Age Rating: <AgeDetails>{tvObject?.certificate}</AgeDetails>
+              </TvDetails>
             ) : null}
           </div>
-          {userSignedIn && containedTvShow === false && (
-            <ButtonWatchList onClick={addTv}>Add to WatchList</ButtonWatchList>
-          )}
-          {userSignedIn && containedTvShow === true && (
-            <ButtonWatchList onClick={removeTv}>
-              Remove From WatchList
-            </ButtonWatchList>
-          )}
         </>
       ) : (
         <CircularProgress></CircularProgress>
@@ -173,14 +187,27 @@ const MovieById = () => {
     </Wrapper>
   );
 };
-
+const WatchTitle = styled.div`
+  font-size: 20px;
+`;
+const WatchMap = styled.div`
+  display: flex;
+`;
+const WatchMedia = styled.div`
+  margin-right: 5px;
+`;
+const AgeDetails = styled.div`
+  font-size: 17px;
+  display: inline-block;
+`;
 const GenericDiv = styled.div`
   padding: 5px;
 `;
 
 const TvTitle = styled.span`
-  font-size: 50px;
+  font-size: 40px;
   color: white;
+  margin-right: 20px;
 `;
 const Wrapper = styled.div`
   background-color: black;
@@ -209,10 +236,12 @@ const TvImdbRating = styled.div``;
 
 const TvGenresDiv = styled.div``;
 const TvMetacriticRating = styled.div``;
-const TvWayToWatch = styled.div``;
+const TvWayToWatch = styled.div`
+  display: flex;
+`;
 
 const TvDetails = styled.span`
-  font-size: 25px;
+  font-size: 20px;
 `;
 const TvBanner = styled.div`
   width: 85vw;

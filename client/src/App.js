@@ -22,7 +22,7 @@ function App() {
           <Route exact path="/">
             <Homepage />
           </Route>
-          <Route exact path="/Preferences">
+          <Route exact path="/Browse">
             <Preferences />
           </Route>
           <Route exact path="/WatchList">
