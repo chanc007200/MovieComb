@@ -13,10 +13,10 @@ const WatchListPage = () => {
         const getName = sessionStorage
           .getItem("SignedInUser")
           .replace(/['"]+/g, "");
-        console.log(getName);
+
         const response = await fetch(`/watchList/${getName}`);
         const data = await response.json();
-        console.log(data);
+
         setMyWatchList([data.data]);
         setLoadingState(true);
       }
@@ -24,8 +24,6 @@ const WatchListPage = () => {
     getWatchList();
   }, []);
 
-  console.log(myWatchList);
-  console.log(loadingState);
   return (
     <>
       {myWatchList && loadingState && (
@@ -34,7 +32,6 @@ const WatchListPage = () => {
           <MyList>
             {myWatchList[0]?.map((movieTv) => {
               const titleType = movieTv.title.titleType;
-              console.log(titleType);
               {
                 if (titleType === "movie") {
                   return (

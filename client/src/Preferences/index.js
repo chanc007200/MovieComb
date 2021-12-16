@@ -26,19 +26,13 @@ const Preferences = () => {
   const [movieArray, setMovieArray] = useState([]);
   const [tvArray, setTvArray] = useState([]);
 
-  let [rating, setRating] = useState({ start: 0, end: 100 });
-  let [releaseYear, setReleaseYear] = useState({ start: 0, end: 100 });
-
   const handleChange = (value, name) => {
-    console.log(value);
-    console.log(name);
     setFormData({ ...formData, [name]: value });
   };
 
   useEffect(() => {
     let newTvArray = [];
     let newMovieArray = [];
-    console.log(typeof formData.age);
 
     if (formData.genres !== "undefined") {
       newTvArray = tvArray.filter((tvShow) => {
@@ -46,7 +40,6 @@ const Preferences = () => {
       });
       if (formData.genres !== "undefined") {
         newMovieArray = movieArray.filter((movie) => {
-          console.log(typeof movie?.genres[0]);
           return movie?.genres.includes(formData.genres);
         });
       }
@@ -59,7 +52,6 @@ const Preferences = () => {
         movie?.title.title.toLowerCase().includes(formData.title.toLowerCase())
       );
     }
-    console.log(formData.runTime);
     if (formData.runTime !== "undefined") {
       let startNum = null;
       let endNum = null;
@@ -100,7 +92,7 @@ const Preferences = () => {
         return (movie.title.titleType = "movie");
       });
     }
-    console.log(typeof formData.age);
+
     if (formData.age !== "undefined") {
       newTvArray = tvArray.filter(
         (tvShow) => tvShow?.certificate === formData.age
@@ -121,14 +113,9 @@ const Preferences = () => {
     //   });
     // }
 
-    console.log(newTvArray);
-    console.log(newMovieArray);
-    //console.log(newArray);
     setFilteredMovies(newMovieArray);
     setFilteredTvShows(newTvArray);
   }, [formData]);
-  console.log(tvArray);
-  console.log(movieArray);
 
   const handleSubmit = (ev) => {
     ev.preventDefault();

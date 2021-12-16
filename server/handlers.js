@@ -12,7 +12,7 @@ const options = {
 const getWatchList = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const { userId } = req.params;
-  console.log("da", userId);
+
   try {
     await client.connect();
     const db = client.db("MovieComb");
@@ -20,7 +20,7 @@ const getWatchList = async (req, res) => {
       .collection("Users")
       .find({ name: userId })
       .toArray();
-    console.log(result);
+
     result
       ? res.status(200).json({ status: 200, data: result[0].watchlist })
       : res.status(404).json({ status: 404, data: "WatchList not found" });
@@ -33,7 +33,7 @@ const getWatchList = async (req, res) => {
 
 const addToWatchList = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-  console.log("blah", req.body);
+
   let result = null;
   try {
     await client.connect();
@@ -75,7 +75,6 @@ const removeFromWatchList = async (req, res) => {
       .collection("Users")
       .find({ name: req.body.userSignedIn })
       .toArray();
-    console.log("result", result);
 
     if (result.length > 0) {
       if (req.body.tvObject) {
@@ -88,7 +87,7 @@ const removeFromWatchList = async (req, res) => {
           return movietv._id === req.body.movieObject._id;
         });
       }
-      console.log("hey", checkWatchList);
+
       if (checkWatchList) {
         await db.collection("Users").updateOne(
           { name: req.body.userSignedIn },
@@ -144,7 +143,7 @@ const getInitialSetup = async (req, res) => {
 
 const getMovieById = async (req, res) => {
   const { movieId } = req.params;
-  console.log(movieId);
+
   const client = new MongoClient(MONGO_URI, options);
   try {
     await client.connect();
@@ -169,7 +168,6 @@ const getMovieById = async (req, res) => {
 
 const getTvById = async (req, res) => {
   const { tvId } = req.params;
-  console.log(tvId);
   const client = new MongoClient(MONGO_URI, options);
   try {
     await client.connect();
@@ -194,7 +192,6 @@ const getTvById = async (req, res) => {
 
 const getTvByIdPlot = async (req, res) => {
   const { tvId } = req.params;
-  console.log(tvId);
   const client = new MongoClient(MONGO_URI, options);
   try {
     await client.connect();
@@ -217,7 +214,6 @@ const getTvByIdPlot = async (req, res) => {
 };
 const getTvByIdRecommendedList = async (req, res) => {
   const { tvId } = req.params;
-  console.log(tvId);
   const client = new MongoClient(MONGO_URI, options);
   try {
     await client.connect();
@@ -226,7 +222,6 @@ const getTvByIdRecommendedList = async (req, res) => {
       .collection("Top100TvShowsRecommendedList")
       .find({ _id: tvId })
       .toArray();
-    console.log(recommendedList);
     recommendedList.length > 0
       ? res.status(200).json({ status: 200, data: recommendedList })
       : res.status(404).json({ status: 404, data: "No recommended List" });
@@ -238,7 +233,6 @@ const getTvByIdRecommendedList = async (req, res) => {
 };
 const getMovieByIdRecommendedList = async (req, res) => {
   const { movieId } = req.params;
-  console.log(movieId);
   const client = new MongoClient(MONGO_URI, options);
   try {
     await client.connect();
@@ -261,7 +255,6 @@ const getMovieByIdRecommendedList = async (req, res) => {
     } else {
       console.log("fetching api here");
     }
-    console.log(recommendedList);
     recommendedList.length > 0
       ? res.status(200).json({ status: 200, data: recommendedList })
       : res.status(404).json({ status: 404, data: "No recommended List" });
@@ -274,7 +267,6 @@ const getMovieByIdRecommendedList = async (req, res) => {
 
 const getMovieByIdPlot = async (req, res) => {
   const { movieId } = req.params;
-  console.log(movieId);
   const client = new MongoClient(MONGO_URI, options);
   try {
     await client.connect();
@@ -339,8 +331,6 @@ const loginUsers = async (req, res) => {
     const findUser = await db
       .collection("Users")
       .findOne({ name: checkUserName });
-    console.log(findUser);
-    console.log(typeof findUser);
     if (!findUser) {
       return res.status(400).json({ status: 400, data: "Cannot find user" });
     }

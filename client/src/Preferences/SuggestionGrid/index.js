@@ -15,7 +15,6 @@ const SuggestionGrid = ({ movieArray, tvArray, setMovieArray, setTvArray }) => {
       try {
         const response = await fetch("/getInitialSetup");
         const body = await response.json();
-        console.log(body.data);
         setTvArray(body.data[0]);
         setMovieArray(body.data[1]);
         setLoadedPreferences(true);

@@ -19,13 +19,12 @@ const MovieById = () => {
       try {
         const response = await fetch(`/getMovieById/${movieId}`);
         const body = await response.json();
-        console.log(body.data[0]);
+
         setLoadedMovie(true);
         setMovieObject(body.data[0]);
         const response2 = await fetch(`/getMovieById/plot/${movieId}`);
         const body2 = await response2.json();
         setMoviePlot(body2.data[0].plot);
-        console.log(body2.data[0].plot);
       } catch (err) {
         console.log(err.stack);
       }
@@ -33,17 +32,17 @@ const MovieById = () => {
         const getName = sessionStorage
           .getItem("SignedInUser")
           .replace(/['"]+/g, "");
-        console.log(getName);
+
         const response3 = await fetch(`/watchList/${getName}`);
         const data3 = await response3.json();
-        console.log(data3);
+
         const result = data3.data?.filter((movie) => {
           return movie._id === movieId;
         });
         if (result.length > 0) {
           setContainedMovie(true);
         }
-        console.log(data3);
+
         setMyWatchList([data3.data]);
         setLoadingState(true);
       }
@@ -54,8 +53,6 @@ const MovieById = () => {
 
   const addMovie = async (ev) => {
     ev.preventDefault();
-    console.log(userSignedIn);
-    console.log(movieObject);
     const settings = {
       method: "PUT",
       body: JSON.stringify({ userSignedIn, movieObject }),
@@ -68,7 +65,6 @@ const MovieById = () => {
     try {
       const response = await fetch(`/addToWatchList`, settings);
       const data = await response.json();
-      console.log(data);
       if (data.data.modifiedCount === 1) {
         setContainedMovie(true);
       }
@@ -90,7 +86,6 @@ const MovieById = () => {
     try {
       const response = await fetch(`/removeFromWatchList`, settings);
       const data = await response.json();
-      console.log(data);
       if (data.data === "deleted") {
         setContainedMovie(false);
       }

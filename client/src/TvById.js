@@ -19,28 +19,23 @@ const MovieById = () => {
       try {
         const response = await fetch(`/getTvById/${tvId}`);
         const body = await response.json();
-        console.log(body.data[0]);
         setLoadedTv(true);
         setTvObject(body.data[0]);
         const response2 = await fetch(`/getTvById/plot/${tvId}`);
         const body2 = await response2.json();
         setTvPlot(body2.data[0].plot);
-        console.log(body2.data[0].plot);
         if (sessionStorage.getItem("SignedInUser")) {
           const getName = sessionStorage
             .getItem("SignedInUser")
             .replace(/['"]+/g, "");
-          console.log(getName);
           const response3 = await fetch(`/watchList/${getName}`);
           const data3 = await response3.json();
-          console.log(data3);
           const result = data3.data?.filter((tvshow) => {
             return tvshow._id === tvId;
           });
           if (result.length > 0) {
             setContainedTvShow(true);
           }
-          console.log(data3);
           setMyWatchList([data3.data]);
           setLoadingState(true);
         }
@@ -51,11 +46,8 @@ const MovieById = () => {
 
     matchTv();
   }, []);
-  console.log(tvObject);
   const addTv = async (ev) => {
     ev.preventDefault();
-    console.log(userSignedIn);
-    console.log(tvObject);
     const settings = {
       method: "PUT",
       body: JSON.stringify({ userSignedIn, tvObject }),
@@ -68,7 +60,6 @@ const MovieById = () => {
     try {
       const response = await fetch(`/addToWatchList`, settings);
       const data = await response.json();
-      console.log(data);
       if (data.data.modifiedCount === 1) {
         setContainedTvShow(true);
       }
@@ -89,7 +80,6 @@ const MovieById = () => {
     try {
       const response = await fetch(`/removeFromWatchList`, settings);
       const data = await response.json();
-      console.log(data);
       if (data.data === "deleted") {
         setContainedTvShow(false);
       }
@@ -98,10 +88,7 @@ const MovieById = () => {
     }
   };
 
-  console.log(myWatchList);
-  console.log(containedTvShow);
   const drm = tvObject?.waysToWatch.optionGroups;
-  console.log(drm);
   return (
     <Wrapper>
       {loadedTv && tvObject ? (

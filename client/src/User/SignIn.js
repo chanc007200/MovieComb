@@ -36,7 +36,6 @@ const SignIn = () => {
       if (data.status === 500 || data.status === 401 || data.status === 400) {
         setErrorMessage(data.data);
       } else {
-        console.log(data.data);
         setUserSignedIn(data.data);
         sessionStorage.setItem("SignedInUser", JSON.stringify(data.data));
         setUpWatchList(data.data);
@@ -48,13 +47,11 @@ const SignIn = () => {
   };
 
   const setUpWatchList = async (userId) => {
-    console.log(userId);
     try {
       const response = await fetch(`/watchList/${userId}`);
       const body = await response.json();
-      console.log("hi", body);
+
       setMyWatchList(body.data);
-      console.log(body.data);
     } catch (err) {
       console.log(err);
     }
