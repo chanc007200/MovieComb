@@ -24,9 +24,11 @@ const WatchListPage = () => {
     getWatchList();
   }, []);
 
+  console.log(myWatchList);
+  console.log(myWatchList.length > 0);
   return (
     <>
-      {myWatchList && loadingState && (
+      {myWatchList.length > 0 && loadingState && (
         <Wrapper>
           <MyWatchListTitle>My WatchList</MyWatchListTitle>
           <MyList>
@@ -55,7 +57,7 @@ const WatchListPage = () => {
           </MyList>
         </Wrapper>
       )}
-      {myWatchList.length === 0 && <p>No watchlist</p>}
+      {myWatchList.length == 0 && <p>No watchlist</p>}
     </>
   );
 };

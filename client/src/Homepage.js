@@ -10,9 +10,7 @@ const Homepage = () => {
       {sessionStorage.getItem("SignedInUser") ? (
         <Container>
           <StyledMyWatchList />
-          <TextDiv>
-            You can continue to edit your watchlist in the browse tab
-          </TextDiv>
+          <MyWatchList />
         </Container>
       ) : (
         <>
