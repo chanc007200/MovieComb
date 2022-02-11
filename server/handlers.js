@@ -156,8 +156,6 @@ const getMovieById = async (req, res) => {
 
     if (searchTop100.length > 0) {
       return res.status(200).json({ status: 200, data: searchTop100 });
-    } else {
-      console.log("fetching api here");
     }
   } catch (err) {
     console.log(err.stack);
@@ -180,8 +178,6 @@ const getTvById = async (req, res) => {
 
     if (searchTop100.length > 0) {
       return res.status(200).json({ status: 200, data: searchTop100 });
-    } else {
-      console.log("fetching api here");
     }
   } catch (err) {
     console.log(err.stack);
@@ -203,8 +199,6 @@ const getTvByIdPlot = async (req, res) => {
 
     if (searchPlot.length > 0) {
       return res.status(200).json({ status: 200, data: searchPlot });
-    } else {
-      console.log("fetching api here");
     }
   } catch (err) {
     console.log(err.stack);
@@ -212,6 +206,48 @@ const getTvByIdPlot = async (req, res) => {
     client.close();
   }
 };
+const getMovieByIdImages = async (req, res) => {
+  const { movieId } = req.params;
+  const client = new MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+    const db = client.db("MovieComb");
+    const searchMovieImages = await db
+      .collection("Top100MovieImages")
+      .find({ _id: movieId })
+      .toArray();
+
+    if (searchMovieImages.length > 0) {
+      return res.status(200).json({ status: 200, data: searchMovieImages });
+    }
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    client.close();
+  }
+};
+
+const getTvByIdImages = async (req, res) => {
+  const { tvId } = req.params;
+  const client = new MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+    const db = client.db("MovieComb");
+    const searchTvImages = await db
+      .collection("Top100TvShowImages")
+      .find({ _id: tvId })
+      .toArray();
+
+    if (searchTvImages.length > 0) {
+      return res.status(200).json({ status: 200, data: searchTvImages });
+    }
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    client.close();
+  }
+};
+
 const getTvByIdRecommendedList = async (req, res) => {
   const { tvId } = req.params;
   const client = new MongoClient(MONGO_URI, options);
@@ -231,6 +267,26 @@ const getTvByIdRecommendedList = async (req, res) => {
     client.close();
   }
 };
+
+const getTvByIdGetSeasons = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { tvId } = req.params;
+  try {
+    await client.connect();
+    const db = client.db("MovieComb");
+    const getSeasons = await db
+      .collection("Top100TvShowSeasons")
+      .findOne({ _id: tvId });
+    getSeasons
+      ? res.status(200).json({ status: 200, data: getSeasons })
+      : res.status(404).json({ status: 400, data: "No seasons" });
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    client.close();
+  }
+};
+
 const getMovieByIdRecommendedList = async (req, res) => {
   const { movieId } = req.params;
   const client = new MongoClient(MONGO_URI, options);
@@ -242,9 +298,6 @@ const getMovieByIdRecommendedList = async (req, res) => {
       .find({ _id: movieId })
       .toArray();
 
-    // recommendedList[0].recommendedMovies.map((movieString)=>{
-    //   const slicedString = movieString.slice(7,)
-    // })
     const searchTop100 = await db
       .collection("Top100Movies")
       .find({ _id: movieId })
@@ -252,8 +305,6 @@ const getMovieByIdRecommendedList = async (req, res) => {
 
     if (searchTop100.length > 0) {
       return res.status(200).json({ status: 200, data: searchTop100 });
-    } else {
-      console.log("fetching api here");
     }
     recommendedList.length > 0
       ? res.status(200).json({ status: 200, data: recommendedList })
@@ -278,8 +329,6 @@ const getMovieByIdPlot = async (req, res) => {
 
     if (searchPlot.length > 0) {
       return res.status(200).json({ status: 200, data: searchPlot });
-    } else {
-      console.log("fetching api here");
     }
   } catch (err) {
     console.log(err.stack);
@@ -288,6 +337,45 @@ const getMovieByIdPlot = async (req, res) => {
   }
 };
 
+const getMovieByIdUpcoming = async (req, res) => {
+  console.log("here");
+  const client = new MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+    const db = client.db("MovieComb");
+    const upcomingMovie = await db.getCollection("UpComingMovies");
+    console.log(upcomingMovie);
+    if (upcomingMovie) {
+      return res.status(200).json({ status: 200, data: upcomingMovie });
+    } else {
+      return res.status(404).json({ status: 404, data: "No upcoming list" });
+    }
+  } catch (err) {
+    console.log(err);
+  } finally {
+    client.close();
+  }
+};
+
+const getTvByIdUpcoming = async (req, res) => {
+  console.log("here");
+  const client = new MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+    const db = client.db("MovieComb");
+    const upcomingTvShows = await db.getCollection("UpComingTvShows");
+    console.log(upcomingTvShows);
+    if (upcomingTvShows) {
+      return res.status(200).json({ status: 200, data: upcomingTvShows });
+    } else {
+      return res.status(404).json({ status: 404, data: "No upcoming list" });
+    }
+  } catch (err) {
+    console.log(err);
+  } finally {
+    client.close();
+  }
+};
 const createUsers = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   try {
@@ -314,7 +402,7 @@ const createUsers = async (req, res) => {
         .json({ status: 409, data: "User name already exists" });
     }
   } catch (err) {
-    console.log(err);
+    console.log(err.stack);
     return res.status(500).json({ status: 500, data: "Could not sign up" });
   } finally {
     client.close();
@@ -342,12 +430,13 @@ const loginUsers = async (req, res) => {
         .json({ status: 401, data: "Password doesn't match" });
     }
   } catch (err) {
-    console.log(err);
+    console.log(err.stack);
     return res.status(500).json({ status: 500, data: "Could not sign in" });
   } finally {
     client.close();
   }
 };
+
 module.exports = {
   getWatchList,
   getInitialSetup,
@@ -361,4 +450,9 @@ module.exports = {
   getTvByIdRecommendedList,
   getMovieByIdRecommendedList,
   removeFromWatchList,
+  getMovieByIdImages,
+  getTvByIdImages,
+  getTvByIdGetSeasons,
+  getTvByIdUpcoming,
+  getMovieByIdUpcoming,
 };

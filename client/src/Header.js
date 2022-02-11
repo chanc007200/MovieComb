@@ -18,11 +18,11 @@ const Header = () => {
           <LogoText>MovieComb</LogoText>
         </WebsiteLogo>
       </NavLink>
-      <NavLink to="/Browse" style={{ textDecoration: "none" }}>
-        <PreferencesLink>Browse</PreferencesLink>
+      <NavLink to="/Filter" style={{ textDecoration: "none" }}>
+        <PreferencesLink>Filter</PreferencesLink>
       </NavLink>
-      <NavLink to="/Watchlist" style={{ textDecoration: "none" }}>
-        <WatchListLink>WatchList</WatchListLink>
+      <NavLink to="/Browse" style={{ textDecoration: "none" }}>
+        <WatchListLink>Browse</WatchListLink>
       </NavLink>
       {userSignedIn === null ? (
         <UserSection>

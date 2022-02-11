@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ThumbNail from "../ThumbNail";
-import { MovieTvContext } from "../Contexts/MovieTvContext";
 
 const WatchListPage = () => {
-  const { myWatchList, setMyWatchList } = useContext(MovieTvContext);
   const [loadingState, setLoadingState] = useState(false);
+  const [myWatchList, setMyWatchList] = useState(null);
 
   useEffect(() => {
     const getWatchList = async () => {
@@ -16,48 +15,46 @@ const WatchListPage = () => {
 
         const response = await fetch(`/watchList/${getName}`);
         const data = await response.json();
-
-        setMyWatchList([data.data]);
+        setMyWatchList(data.data);
         setLoadingState(true);
       }
     };
     getWatchList();
   }, []);
-
-  console.log(myWatchList);
-  console.log(myWatchList.length > 0);
   return (
     <>
-      {myWatchList.length > 0 && loadingState && (
-        <Wrapper>
-          <MyWatchListTitle>My WatchList</MyWatchListTitle>
-          <MyList>
-            {myWatchList[0]?.map((movieTv) => {
-              const titleType = movieTv.title.titleType;
-              {
-                if (titleType === "movie") {
-                  return (
-                    <ThumbNail
-                      url={movieTv?.title.image.url}
-                      movieId={movieTv?._id}
-                      tvId={null}
-                    />
-                  );
-                } else {
-                  return (
-                    <ThumbNail
-                      url={movieTv?.title.image.url}
-                      tvId={movieTv?._id}
-                      movieId={null}
-                    />
-                  );
+      {loadingState &&
+        (myWatchList?.length === 0 || myWatchList == null ? (
+          <p>No WatchList</p>
+        ) : (
+          <Wrapper>
+            <MyWatchListTitle>My WatchList</MyWatchListTitle>
+            <MyList>
+              {myWatchList?.map((movieTv) => {
+                const titleType = movieTv.title.titleType;
+                {
+                  if (titleType === "movie") {
+                    return (
+                      <ThumbNail
+                        url={movieTv?.title.image.url}
+                        movieId={movieTv?._id}
+                        tvId={null}
+                      />
+                    );
+                  } else {
+                    return (
+                      <ThumbNail
+                        url={movieTv?.title.image.url}
+                        tvId={movieTv?._id}
+                        movieId={null}
+                      />
+                    );
+                  }
                 }
-              }
-            })}
-          </MyList>
-        </Wrapper>
-      )}
-      {myWatchList.length == 0 && <p>No watchlist</p>}
+              })}
+            </MyList>
+          </Wrapper>
+        ))}
     </>
   );
 };

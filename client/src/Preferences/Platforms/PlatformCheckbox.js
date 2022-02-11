@@ -10,13 +10,13 @@ const PlatformCheckbox = ({
 }) => {
   return (
     <Wrapper>
-      <label htmlFor={name}>{platformName}</label>
       <input
         type={type}
         name={name}
         value={value}
         onChange={(ev) => handleChange(ev.target.checked, name)}
       />
+      <label htmlFor={name}>{platformName}</label>
     </Wrapper>
   );
 };

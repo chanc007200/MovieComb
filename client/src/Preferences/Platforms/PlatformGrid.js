@@ -25,5 +25,5 @@ const PlatformGrid = ({ handleChange }) => {
 const Wrapper = styled.div`
   display: flex;
 `;
-const PlatformDiv = styled.div``;
+
 export default PlatformGrid;

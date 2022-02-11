@@ -3,27 +3,38 @@ import { useParams } from "react-router";
 import styled from "styled-components";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { UserContext } from "./Contexts/UserContext";
-import { MovieTvContext } from "./Contexts/MovieTvContext";
+
 const MovieById = () => {
   const { tvId } = useParams();
   const [tvObject, setTvObject] = useState(null);
   const [loadedTv, setLoadedTv] = useState(false);
   const { userSignedIn } = useContext(UserContext);
-  const { myWatchList, setMyWatchList } = useContext(MovieTvContext);
   const [tvPlot, setTvPlot] = useState(null);
-  const [loadingState, setLoadingState] = useState(false);
   const [containedTvShow, setContainedTvShow] = useState(false);
+  const [tvSeason, setTvSeason] = useState(null);
+  const [tvImages, setTvImages] = useState(null);
 
   useEffect(() => {
     const matchTv = async () => {
       try {
         const response = await fetch(`/getTvById/${tvId}`);
         const body = await response.json();
-        setLoadedTv(true);
         setTvObject(body.data[0]);
         const response2 = await fetch(`/getTvById/plot/${tvId}`);
         const body2 = await response2.json();
         setTvPlot(body2.data[0].plot);
+        const response4 = await fetch(`/getTvById/seasons/${tvId}`);
+        const body4 = await response4.json();
+        setTvSeason(body4.data);
+        const NUMBEROFSEASONS = Object.keys(body4.data).length - 1;
+        const response5 = await fetch(`/getTvById/images/${tvId}`);
+        const body5 = await response5.json();
+        let imageArray = [];
+        for (let i = 0; i < NUMBEROFSEASONS; i++) {
+          imageArray.push(body5.data[0].images[i]);
+        }
+        setTvImages(imageArray);
+
         if (sessionStorage.getItem("SignedInUser")) {
           const getName = sessionStorage
             .getItem("SignedInUser")
@@ -36,9 +47,8 @@ const MovieById = () => {
           if (result.length > 0) {
             setContainedTvShow(true);
           }
-          setMyWatchList([data3.data]);
-          setLoadingState(true);
         }
+        setLoadedTv(true);
       } catch (err) {
         console.log(err.stack);
       }
@@ -88,15 +98,63 @@ const MovieById = () => {
     }
   };
 
-  const drm = tvObject?.waysToWatch.optionGroups;
+  const waysToWatch = tvObject?.waysToWatch.optionGroups;
+
   return (
     <Wrapper>
       {loadedTv && tvObject ? (
         <>
           <TvContainer>
-            <TvPosterDiv>
+            <TvLeftContainer>
               <TvPoster src={tvObject?.title.image.url} />
-            </TvPosterDiv>
+              <div>
+                {tvObject?.ratings["rating"] === undefined &&
+                tvObject?.metacritic.reviewCount > 0 ? null : (
+                  <TvRatings>
+                    <TvDetails>Ratings:</TvDetails>
+
+                    {tvObject?.ratings.ratingCount > 0 ? (
+                      <>
+                        <span>IMDB Rating</span>
+                        <span> {tvObject?.ratings.rating}</span>
+                      </>
+                    ) : null}
+                    {tvObject?.ratings.reviewCount > 0 ? (
+                      <>
+                        <span>Metacritic Rating </span>
+                        <span>{tvObject?.metacritic.metaScore}</span>
+                      </>
+                    ) : null}
+                  </TvRatings>
+                )}
+                <TvGenresDiv>
+                  <TvDetails>Genres:</TvDetails>
+
+                  {tvObject.genres?.map((element) => {
+                    return element + " ";
+                  })}
+                </TvGenresDiv>
+                {
+                  <TvWayToWatch>
+                    <WatchTitle>Watch Now:</WatchTitle>
+                    <WatchMap>
+                      {waysToWatch?.map((option) => {
+                        return option.watchOptions.map((op) => {
+                          return (
+                            <WatchMedia>{op.primaryText + ","}</WatchMedia>
+                          );
+                        });
+                      })}
+                    </WatchMap>
+                  </TvWayToWatch>
+                }
+                {tvObject?.certificate !== null ? (
+                  <TvDetails>
+                    Age Rating: <AgeDetails>{tvObject?.certificate}</AgeDetails>
+                  </TvDetails>
+                ) : null}
+              </div>
+            </TvLeftContainer>
             <div>
               <TvTitle>{tvObject?.title.title}</TvTitle>
               {userSignedIn && containedTvShow === false && (
@@ -120,53 +178,18 @@ const MovieById = () => {
                 ) : null}
               </TvInfo>
               <TvPlot>{tvPlot}</TvPlot>
+              <TvImages>
+                {tvImages?.map((image, index) => {
+                  return (
+                    <TvSeasonBox>
+                      <IndividualImg src={image.url} alt="TvImg" />
+                      <span>Season {index + 1}</span>
+                    </TvSeasonBox>
+                  );
+                })}
+              </TvImages>
             </div>
           </TvContainer>
-          <div>
-            {tvObject?.ratings["rating"] == undefined &&
-            tvObject?.metacritic.reviewCount > 0 ? null : (
-              <TvRatings>
-                <TvDetails>Ratings:</TvDetails>
-
-                {tvObject?.ratings.ratingCount > 0 ? (
-                  <>
-                    <span>IMDB Rating</span>
-                    <span> {tvObject?.ratings.rating}</span>
-                  </>
-                ) : null}
-                {tvObject?.ratings.reviewCount > 0 ? (
-                  <>
-                    <span>Metacritic Rating </span>
-                    <span>{tvObject?.metacritic.metaScore}</span>
-                  </>
-                ) : null}
-              </TvRatings>
-            )}
-            <TvGenresDiv>
-              <TvDetails>Genres:</TvDetails>
-
-              {tvObject.genres?.map((element) => {
-                return element + " ";
-              })}
-            </TvGenresDiv>
-            {
-              <TvWayToWatch>
-                <WatchTitle>Watch Now:</WatchTitle>
-                <WatchMap>
-                  {drm?.map((option) => {
-                    return option.watchOptions.map((op) => {
-                      return <WatchMedia>{op.primaryText}</WatchMedia>;
-                    });
-                  })}
-                </WatchMap>
-              </TvWayToWatch>
-            }
-            {tvObject?.certificate !== null ? (
-              <TvDetails>
-                Age Rating: <AgeDetails>{tvObject?.certificate}</AgeDetails>
-              </TvDetails>
-            ) : null}
-          </div>
         </>
       ) : (
         <CircularProgress></CircularProgress>
@@ -178,7 +201,7 @@ const WatchTitle = styled.div`
   font-size: 20px;
 `;
 const WatchMap = styled.div`
-  display: flex;
+  font-size: 20px;
 `;
 const WatchMedia = styled.div`
   margin-right: 5px;
@@ -190,14 +213,17 @@ const AgeDetails = styled.div`
 const GenericDiv = styled.div`
   padding: 5px;
 `;
-
+const IndividualImg = styled.img`
+  height: 250px;
+  width: 300px;
+  padding: 15px;
+`;
 const TvTitle = styled.span`
   font-size: 40px;
   color: white;
   margin-right: 20px;
 `;
 const Wrapper = styled.div`
-  background-color: black;
   height: 100vh;
   margin-left: 15px;
 `;
@@ -205,7 +231,7 @@ const TvPoster = styled.img`
   width: 345px;
   height: 512px;
 `;
-const TvPosterDiv = styled.div``;
+const TvLeftContainer = styled.div``;
 
 const TvInfo = styled.div`
   display: flex;
@@ -233,5 +259,16 @@ const ButtonWatchList = styled.button`
 
 const TvPlot = styled.div`
   margin-top: 5vh;
+`;
+const TvImages = styled.div`
+  width: 1500px;
+  height: 500px;
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const TvSeasonBox = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 export default MovieById;

@@ -1,23 +1,24 @@
 //Change depending on what the api gives
 export const mediaOptions = [
-  { value: "movies and tv shows", label: "Movies and Tv shows" },
-  { value: "movies", label: "Movies" },
-  { value: "tv shows", label: "Tv shows" },
+  { value: "Movies and tv shows", label: "Movies and Tv shows" },
+  { value: "Movies", label: "Movies" },
+  { value: "Tv shows", label: "Tv shows" },
 ];
 
 export const runtimeOptions = [
   { value: "undefined", label: "Run Time" },
-  { value: "no specified", label: "No specified Run Time" },
-  { value: "lessHour", label: "Less than 60 minutes" },
-  { value: "hourToTwo", label: "60 minutes to 120 minutes" },
-  { value: "moretwoHours", label: "More than 120 minutes" },
+  { value: "No Specified RunTime", label: "No specified Run Time" },
+  { value: "LessHour", label: "Less than 60 minutes" },
+  { value: "HourToTwo", label: "60 minutes to 120 minutes" },
+  { value: "MoretwoHours", label: "More than 120 minutes" },
 ];
 
 export const ageFilterOptions = [
   { value: "undefined", label: "Age" },
-  { value: "no age filter", label: "No age filter" },
-  { value: "G", label: "G" },
+  { value: "No Age Filter", label: "No age filter" },
+  { value: "PG", label: "PG" },
   { value: "TV-PG", label: "TV-PG" },
+  { value: "PG-13", label: "PG-13" },
   { value: "TV-14", label: "TV-14" },
   { value: "TV-MA", label: "TV-MA" },
   { value: "R", label: "R" },
@@ -26,19 +27,15 @@ export const ageFilterOptions = [
 export const platformOptions = [
   { value: "Netflix", label: "Netflix" },
   { value: "Prime", label: "Prime" },
-  { value: "Disney", label: "Disney" },
-  { value: "Hbo", label: "HBO" },
+  { value: "Hbo", label: "Hbo" },
   { value: "Hulu", label: "Hulu" },
-  { value: "Peacock", label: "Peacock" },
   { value: "Paramount", label: "Paramount" },
-  { value: "Starz", label: "Starz" },
-  { value: "Showtime", label: "ShowTime" },
-  { value: "Apple", label: "Apple" },
-  { value: "Mubi", label: "Mubi" },
+  { value: "Nbc", label: "Nbc" },
 ];
 
 export const genreOptions = [
   { value: "undefined", label: "Genre" },
+  { value: "No Genre", label: "No Genre" },
   { value: "Action", label: "Action" },
   { value: "Adventure", label: "Adventure" },
   { value: "Animation", label: "Animation" },

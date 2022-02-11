@@ -11,7 +11,7 @@ import GlobalStyles from "./GlobalStyles";
 import TvById from "./TvById";
 import SignUp from "./User/SignUp";
 import SignIn from "./User/SignIn";
-
+import Browse from "./Browse/index";
 function App() {
   return (
     <Wrapper>
@@ -22,11 +22,11 @@ function App() {
           <Route exact path="/">
             <Homepage />
           </Route>
-          <Route exact path="/Browse">
+          <Route exact path="/Filter">
             <Preferences />
           </Route>
-          <Route exact path="/WatchList">
-            <WatchList />
+          <Route exact path="/Browse">
+            <Browse />
           </Route>
           <Route exact path="/Movie/:movieId">
             <MovieById />

@@ -1,8 +1,7 @@
 // const { MongoClient } = require("mongodb");
-// //import React from "react";
+
 // const fetch = require("cross-fetch");
 
-// //const { PopularMovies } = require("./data");
 // require("dotenv").config();
 // const { MONGO_URI } = process.env;
 // const { REACT_APP_API_KEY } = process.env;
@@ -36,7 +35,7 @@
 //   "tt12536294",
 //   "tt9620288",
 //   "tt0097958",
-//   ",tt11540284",
+//   "tt11540284",
 //   "tt0099785",
 //   "tt7740496",
 //   "tt12789558",
@@ -216,44 +215,88 @@
 //   "tt5071412",
 // ];
 
+// const NewTvShows = [
+//   "tt11238186",
+//   "tt15574188",
+//   "tt14914500",
+//   "tt18071262",
+//   "tt14018296",
+//   "tt15310848",
+//   "tt11664462",
+//   "tt17276462",
+//   "tt14162952",
+//   "tt17500288",
+//   "tt17518446",
+//   "tt14927258",
+//   "tt17498954",
+//   "tt16151146",
+//   "tt17276976",
+//   "tt11434042",
+//   "tt15249264",
+//   "tt17047848",
+//   "tt12772892",
+//   "tt14444472",
+// ];
+
+// const NewMovies = [
+//   "tt7657566",
+//   "tt10223460",
+//   "tt14060094",
+//   "tt8851148",
+//   "tt10055546",
+//   "tt11087960",
+//   "tt11252460",
+//   "tt1464335",
+//   "tt6805938",
+//   "tt11252248",
+//   "tt9907782",
+//   "tt8128276",
+//   "tt10503736",
+//   "tt5322004",
+//   "tt12889404",
+//   "tt15374070",
+//   "tt12753120",
+//   "tt10308878",
+//   "tt6267600",
+//   "tt14174168",
+// ];
 // const fetchMovies = async () => {
 //   let MovieArray = [];
-//   // for (let i = 1; i < PopularTvShows.length - 1; i++) {
-//   //   myFunction = () => {
-//   //     setTimeout(function () {
-//   //       console.log("waiting");
-//   //     }, 1000);
-//   //   };
+//   for (let i = 0; i < NewTvShows.length; i++) {
+//     myFunction = () => {
+//       setTimeout(function () {
+//         console.log("waiting");
+//       }, 15000);
+//     };
 
-//   try {
-//     await fetch(
-//       `https://imdb8.p.rapidapi.com/title/get-full-credits?tconst=${PopularTvShows[0]}`,
-//       {
-//         method: "GET",
-//         headers: {
-//           "x-rapidapi-host": "imdb8.p.rapidapi.com",
-//           "x-rapidapi-key": REACT_APP_API_KEY,
-//         },
-//       }
-//     )
-//       .then((response) => response.json())
-//       .then((data) => {
-//         console.log(data);
-//         MovieArray.push({ ...data, _id: PopularTvShows[0] });
-//       })
-//       .catch((err) => {
-//         console.error(err);
-//       });
+//     try {
+//       await fetch(
+//         `https://imdb8.p.rapidapi.com/title/get-meta-data?ids=${NewTvShows[i]}`,
+//         {
+//           method: "GET",
+//           headers: {
+//             "x-rapidapi-host": "imdb8.p.rapidapi.com",
+//             "x-rapidapi-key": REACT_APP_API_KEY,
+//           },
+//         }
+//       )
+//         .then((response) => response.json())
+//         .then((data) => {
+//           MovieArray.push({ ...data, _id: NewTvShows[i] });
+//         })
+//         .catch((err) => {
+//           console.error(err);
+//         });
 
-//     //console.log(genreArray);
-//     // return genreArray.map((gnr) => {
-//     //   return { genre: gnr.description };
-//     // });
-//   } catch (err) {
-//     console.log("err", err.stack);
+//       //console.log(genreArray);
+//       // return genreArray.map((gnr) => {
+//       //   return { genre: gnr.description };
+//       // });
+//     } catch (err) {
+//       console.log("err", err.stack);
+//     }
+//     //     myFunction();
 //   }
-//   //     myFunction();
-//   //   }
 //   return MovieArray;
 //   //    const body = await response.json();
 //   //    console.log(body);
@@ -267,14 +310,13 @@
 //     const db = client.db("MovieComb");
 
 //     const response = await fetchMovies();
-//     console.log(response);
 //     // response.map((object) => {
 //     //   return updated.push(object);
 //     //   //   return updated.push({
 
 //     //   //   });
 //     // });
-//     await db.collection("Top100TvFullCredits").insertMany(response);
+//     await db.collection("UpComingTvShows").insertMany(response);
 //   } catch (err) {
 //     console.log(err.stack);
 //   } finally {

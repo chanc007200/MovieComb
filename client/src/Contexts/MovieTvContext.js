@@ -2,15 +2,15 @@ import React, { createContext, useState } from "react";
 export const MovieTvContext = createContext(null);
 
 export const MovieTvProvider = ({ children }) => {
-  const [myWatchList, setMyWatchList] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [filteredTvShows, setFilteredTvShows] = useState([]);
+  const [tvMovies, setTvMovies] = useState([]);
   const [isUpdated, setIsUpdated] = useState(false);
   const [formData, setFormData] = useState({
     age: "undefined",
     runTime: "undefined",
     genres: "undefined",
-    mediaType: "movies and tv shows",
+    mediaType: "Movies and tv shows",
     title: "",
 
     Netflix: false,
@@ -29,8 +29,6 @@ export const MovieTvProvider = ({ children }) => {
   return (
     <MovieTvContext.Provider
       value={{
-        myWatchList,
-        setMyWatchList,
         formData,
         setFormData,
         setFilteredMovies,
@@ -39,6 +37,8 @@ export const MovieTvProvider = ({ children }) => {
         filteredTvShows,
         isUpdated,
         setIsUpdated,
+        setTvMovies,
+        tvMovies,
       }}
     >
       {children}

@@ -10,7 +10,6 @@ const Homepage = () => {
       {sessionStorage.getItem("SignedInUser") ? (
         <Container>
           <StyledMyWatchList />
-          <MyWatchList />
         </Container>
       ) : (
         <>

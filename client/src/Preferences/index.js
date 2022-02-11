@@ -18,110 +18,225 @@ const Preferences = () => {
     setFormData,
     setFilteredMovies,
     setFilteredTvShows,
-    filteredMovies,
-    filteredTvShows,
     isUpdated,
     setIsUpdated,
+
+    tvMovies,
   } = useContext(MovieTvContext);
-  const [movieArray, setMovieArray] = useState([]);
-  const [tvArray, setTvArray] = useState([]);
 
   const handleChange = (value, name) => {
+    setIsUpdated(false);
     setFormData({ ...formData, [name]: value });
+    setIsUpdated(true);
   };
 
   useEffect(() => {
-    let newTvArray = [];
-    let newMovieArray = [];
+    if (isUpdated) {
+      let originalTv = tvMovies[0];
+      let originalMovies = tvMovies[1];
+      let newTvArray = originalTv;
+      let newMovieArray = originalMovies;
 
-    if (formData.genres !== "undefined") {
-      newTvArray = tvArray.filter((tvShow) => {
-        return tvShow?.genres.includes(formData.genres);
-      });
-      if (formData.genres !== "undefined") {
-        newMovieArray = movieArray.filter((movie) => {
+      if (formData.mediaType === "Tv shows") {
+        newTvArray = newTvArray.filter((tvShow) => {
+          return (
+            tvShow?.title.titleType === "tvSeries" ||
+            tvShow?.title.titleType === "tvMiniSeries"
+          );
+        });
+        newMovieArray = [];
+      }
+      if (formData.mediaType === "Movies") {
+        newTvArray = [];
+        newMovieArray = newMovieArray.filter((movie) => {
+          return movie?.title.titleType === "movie";
+        });
+      }
+      if (formData.genres !== "undefined" && formData.genres !== "No Genre") {
+        newTvArray = newTvArray.filter((tvShow) => {
+          return tvShow?.genres.includes(formData.genres);
+        });
+        newMovieArray = newMovieArray.filter((movie) => {
           return movie?.genres.includes(formData.genres);
         });
       }
-    }
-    if (formData.title !== "") {
-      newTvArray = tvArray.filter((tvShow) =>
-        tvShow?.title.title.toLowerCase().includes(formData.title.toLowerCase())
-      );
-      newMovieArray = movieArray.filter((movie) =>
-        movie?.title.title.toLowerCase().includes(formData.title.toLowerCase())
-      );
-    }
-    if (formData.runTime !== "undefined") {
-      let startNum = null;
-      let endNum = null;
-      switch (formData.runTime) {
-        case "lessHour":
-          startNum = 0;
-          endNum = 60;
-          break;
-        case "hourToTwo":
-          startNum = 60;
-          endNum = 120;
-          break;
-        case "moretwoHours":
-          startNum = 120;
-          endNum = 999;
-          break;
-        default:
-          console.log("undefined");
+      if (formData.title !== "") {
+        newTvArray = originalTv.filter((tvShow) =>
+          tvShow?.title.title
+            .toLowerCase()
+            .includes(formData.title.toLowerCase())
+        );
+        newMovieArray = originalMovies.filter((movie) =>
+          movie?.title.title
+            .toLowerCase()
+            .includes(formData.title.toLowerCase())
+        );
       }
-      newTvArray = tvArray.filter(
-        (tvShow) =>
-          startNum <= tvShow?.title.runningTimeInMinutes &&
-          tvShow?.title.runningTimeInMinutes <= endNum
-      );
-      newMovieArray = movieArray.filter(
-        (movie) =>
-          startNum <= movie?.title.runningTimeInMinutes &&
-          movie?.title.runningTimeInMinutes <= endNum
-      );
+      if (
+        formData.runTime !== "undefined" &&
+        formData.runTime !== "No Specified RunTime"
+      ) {
+        let startNum = null;
+        let endNum = null;
+        switch (formData.runTime) {
+          case "LessHour":
+            startNum = 0;
+            endNum = 60;
+            break;
+          case "HourToTwo":
+            startNum = 60;
+            endNum = 120;
+            break;
+          case "MoretwoHours":
+            startNum = 120;
+            endNum = 999;
+            break;
+          default:
+            console.log("undefined");
+        }
+        newTvArray = newTvArray.filter((tvShow) => {
+          return (
+            startNum <= tvShow?.title.runningTimeInMinutes &&
+            tvShow?.title.runningTimeInMinutes <= endNum
+          );
+        });
+        newMovieArray = newMovieArray.filter((movie) => {
+          return (
+            startNum <= movie?.title.runningTimeInMinutes &&
+            movie?.title.runningTimeInMinutes <= endNum
+          );
+        });
+      }
+
+      if (formData.age !== "undefined" && formData.age !== "No Age Filter") {
+        newTvArray = newTvArray.filter(
+          (tvShow) => tvShow?.certificate === formData.age
+        );
+
+        newMovieArray = newMovieArray.filter(
+          (movie) => movie?.certificate === formData.age
+        );
+      }
+
+      if (formData.Netflix === true) {
+        newTvArray = newTvArray.filter((tvShow) => {
+          return tvShow.waysToWatch.optionGroups?.find((options) => {
+            return options.watchOptions.find((innerOptions) => {
+              return innerOptions.primaryText === "Netflix";
+            });
+          });
+        });
+      }
+
+      if (formData.Netflix === true) {
+        newMovieArray = newMovieArray.filter((movie) => {
+          return movie.waysToWatch.optionGroups?.find((options) => {
+            return options.watchOptions.find((innerOptions) => {
+              return innerOptions.primaryText === "Netflix";
+            });
+          });
+        });
+      }
+      if (formData.Prime === true) {
+        newTvArray = newTvArray.filter((tvShow) => {
+          return tvShow.waysToWatch.optionGroups?.find((options) => {
+            return options.watchOptions.find((innerOptions) => {
+              return innerOptions.primaryText === "Prime Video";
+            });
+          });
+        });
+      }
+
+      if (formData.Prime === true) {
+        newMovieArray = newMovieArray.filter((movie) => {
+          return movie.waysToWatch.optionGroups?.find((options) => {
+            return options.watchOptions.find((innerOptions) => {
+              return innerOptions.primaryText === "Prime Video";
+            });
+          });
+        });
+      }
+      if (formData.Hbo === true) {
+        newTvArray = newTvArray.filter((tvShow) => {
+          return tvShow.waysToWatch.optionGroups?.find((options) => {
+            return options.watchOptions.find((innerOptions) => {
+              return innerOptions.primaryText === "HBO Max";
+            });
+          });
+        });
+      }
+
+      if (formData.Hbo === true) {
+        newMovieArray = newMovieArray.filter((movie) => {
+          return movie.waysToWatch.optionGroups?.find((options) => {
+            return options.watchOptions.find((innerOptions) => {
+              return innerOptions.primaryText === "HBO Max";
+            });
+          });
+        });
+      }
+      if (formData.Hulu === true) {
+        newTvArray = newTvArray.filter((tvShow) => {
+          return tvShow.waysToWatch.optionGroups?.find((options) => {
+            return options.watchOptions.find((innerOptions) => {
+              return innerOptions.primaryText === "Hulu";
+            });
+          });
+        });
+      }
+
+      if (formData.Hulu === true) {
+        newMovieArray = newMovieArray.filter((movie) => {
+          return movie.waysToWatch.optionGroups?.find((options) => {
+            return options.watchOptions.find((innerOptions) => {
+              return innerOptions.primaryText === "Hulu";
+            });
+          });
+        });
+      }
+
+      if (formData.Paramount === true) {
+        newTvArray = newTvArray.filter((tvShow) => {
+          return tvShow.waysToWatch.optionGroups?.find((options) => {
+            return options.watchOptions.find((innerOptions) => {
+              return innerOptions.primaryText === "Paramount+";
+            });
+          });
+        });
+      }
+
+      if (formData.Paramount === true) {
+        newMovieArray = newMovieArray.filter((movie) => {
+          return movie.waysToWatch.optionGroups?.find((options) => {
+            return options.watchOptions.find((innerOptions) => {
+              return innerOptions.primaryText === "Paramount+";
+            });
+          });
+        });
+      }
+      if (formData.Nbc === true) {
+        newTvArray = newTvArray.filter((tvShow) => {
+          return tvShow.waysToWatch.optionGroups?.find((options) => {
+            return options.watchOptions.find((innerOptions) => {
+              return innerOptions.primaryText === "NBC";
+            });
+          });
+        });
+      }
+
+      if (formData.Nbc === true) {
+        newMovieArray = newMovieArray.filter((movie) => {
+          return movie.waysToWatch.optionGroups?.find((options) => {
+            return options.watchOptions.find((innerOptions) => {
+              return innerOptions.primaryText === "NBC";
+            });
+          });
+        });
+      }
+      setFilteredMovies(newMovieArray);
+      setFilteredTvShows(newTvArray);
     }
-    if (formData.mediaType === "tv shows") {
-      newTvArray = tvArray.filter((tvShow) => {
-        return tvShow.title.titleType.includes("tv");
-      });
-    }
-    if (formData.mediaType === "movies") {
-      newMovieArray = movieArray.filter((movie) => {
-        return (movie.title.titleType = "movie");
-      });
-    }
-
-    if (formData.age !== "undefined") {
-      newTvArray = tvArray.filter(
-        (tvShow) => tvShow?.certificate === formData.age
-      );
-
-      newMovieArray = movieArray.filter(
-        (movie) => movie?.certificate === formData.age
-      );
-    }
-
-    // if (formData.Netflix === true) {
-    //   newTvArray = tvArray.map((tvShow) => {
-    //       return tvShow.waysToWatch.watchOptions.optionGroups.filter((opt) => {
-
-    //       //  return "Netflix"==={opt.watchOptions.primaryText}
-    //       });
-    //     });
-    //   });
-    //}
-
-    setFilteredMovies(newMovieArray);
-    setFilteredTvShows(newTvArray);
   }, [formData]);
-
-  const handleSubmit = (ev) => {
-    ev.preventDefault();
-    setMovieArray(filteredMovies);
-    setTvArray(filteredTvShows);
-  };
 
   const handleReset = (ev) => {
     ev.preventDefault();
@@ -133,20 +248,15 @@ const Preferences = () => {
     formData.title = "";
     formData.Netflix = false;
     formData.Prime = false;
-    formData.Disney = false;
     formData.Hbo = false;
     formData.Hulu = false;
-    formData.Peacock = false;
     formData.Paramount = false;
-    formData.Starz = false;
-    formData.Showtime = false;
-    formData.Apple = false;
-    formData.Mubi = false;
+    formData.Nbc = false;
   };
   return (
     <Wrapper>
       <Title>What do you want to watch today?</Title>
-      <FormContainer onSubmit={(ev) => handleSubmit(ev)}>
+      <FormContainer>
         <DropdownBoxes>
           <MediaBox>
             <MediaDropdown
@@ -196,18 +306,12 @@ const Preferences = () => {
         </SearchContainer>
         <PlatformGrid handleChange={handleChange} />
         {/* </FormInput> */}
-        <SubmitButton type="submit">Submit</SubmitButton>
         <ResetButton type="button" onClick={handleReset}>
           Reset
         </ResetButton>
       </FormContainer>
       <SuggestionGridDiv>
-        <SuggestionGrid
-          movieArray={movieArray}
-          tvArray={tvArray}
-          setTvArray={setTvArray}
-          setMovieArray={setMovieArray}
-        />
+        <SuggestionGrid />
       </SuggestionGridDiv>
     </Wrapper>
   );
