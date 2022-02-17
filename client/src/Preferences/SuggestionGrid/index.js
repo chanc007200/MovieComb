@@ -4,8 +4,6 @@ import styled from "styled-components";
 import ThumbNail from "../../ThumbNail";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { BsBookmarkStarFill } from "react-icons/bs";
-import { Checkbox } from "@material-ui/core";
-const { REACT_APP_API_KEY } = process.env;
 require("dotenv").config();
 
 const SuggestionGrid = () => {
@@ -17,7 +15,6 @@ const SuggestionGrid = () => {
     isUpdated,
     setIsUpdated,
     setTvMovies,
-    // myWatchList,
   } = useContext(MovieTvContext);
   const [myWatchList, setMyWatchList] = useState(null);
   const [loadingState, setLoadingState] = useState(false);
@@ -47,11 +44,14 @@ const SuggestionGrid = () => {
         setMyWatchList(data.data);
         setLoadingState(true);
       }
+      if (myWatchList === null) {
+        setLoadingState(true);
+      }
     };
     initialSetup();
     getWatchList();
   }, []);
-  console.log(myWatchList);
+
   return (
     <Wrapper>
       {isUpdated && loadingState ? (
@@ -60,7 +60,7 @@ const SuggestionGrid = () => {
             return (
               <TvContainer>
                 <AlteredBsBookmarkStarFill />
-                <AlteredThumbNail
+                <ThumbNail
                   url={tv?.title.image.url}
                   tvId={tv?._id}
                   movieId={null}
@@ -88,7 +88,7 @@ const SuggestionGrid = () => {
             return (
               <MovieContainer>
                 <AlteredBsBookmarkStarFill />
-                <AlteredThumbNail
+                <ThumbNail
                   url={movie?.title.image.url}
                   tvId={null}
                   movieId={movie?._id}
@@ -126,8 +126,6 @@ const AlteredBsBookmarkStarFill = styled(BsBookmarkStarFill)`
   right: 0;
 `;
 
-const AlteredThumbNail = styled(ThumbNail)``;
-
 const TvContainer = styled.span`
   position: relative;
 `;
@@ -136,7 +134,5 @@ const MovieContainer = styled.span`
   position: relative;
 `;
 
-const Wrapper = styled.div`
-  width: fit-content;
-`;
+const Wrapper = styled.div``;
 export default SuggestionGrid;

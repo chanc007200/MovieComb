@@ -19,7 +19,7 @@ const Homepage = () => {
             <p>
               Keep track of all the tv shows and movies that you are watching.
             </p>
-            <NavLink to="/Browse">
+            <NavLink to="/Filter">
               <StartButton>Let's get started</StartButton>
             </NavLink>
           </StartButtonDiv>

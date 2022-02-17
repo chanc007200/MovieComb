@@ -223,6 +223,7 @@ const Wrapper = styled.div`
 const MoviePoster = styled.img`
   width: 345px;
   height: 512px;
+  margin-right: 50px;
 `;
 const MovieLeftContainer = styled.div``;
 const MovieYear = styled.div`

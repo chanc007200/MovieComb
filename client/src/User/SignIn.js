@@ -33,7 +33,7 @@ const SignIn = () => {
       };
       const response = await fetch("/users/login", settings);
       const data = await response.json();
-      console.log(data);
+
       if (data.status === 500 || data.status === 401 || data.status === 400) {
         setErrorMessage(data.data);
       } else {
@@ -51,7 +51,7 @@ const SignIn = () => {
     try {
       const response = await fetch(`/watchList/${userId}`);
       const body = await response.json();
-      console.log(body);
+
       setMyWatchList(body.data);
     } catch (err) {
       console.log(err);

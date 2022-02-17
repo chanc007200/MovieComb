@@ -230,6 +230,7 @@ const Wrapper = styled.div`
 const TvPoster = styled.img`
   width: 345px;
   height: 512px;
+  margin-right: 50px;
 `;
 const TvLeftContainer = styled.div``;
 

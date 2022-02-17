@@ -331,12 +331,6 @@ const ResetButton = styled.button`
 `;
 const FormContainer = styled.form``;
 
-const SubmitButton = styled.button`
-  background-color: green;
-  margin-top: 5px;
-  margin-bottom: 10px;
-`;
-
 const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
@@ -369,7 +363,7 @@ const DropdownBoxes = styled.div`
 `;
 
 const SuggestionGridDiv = styled.div`
-  height: 70vh;
+  height: 70%;
   width: 100%;
 `;
 

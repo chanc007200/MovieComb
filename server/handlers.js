@@ -120,11 +120,11 @@ const getInitialSetup = async (req, res) => {
     const db = client.db("MovieComb");
     const randomMovies = await db
       .collection("Top100Movies")
-      .aggregate([{ $sample: { size: 50 } }])
+      .aggregate([{ $sample: { size: 25 } }])
       .toArray();
     const randomTvShows = await db
       .collection("Top100TvShows")
-      .aggregate([{ $sample: { size: 50 } }])
+      .aggregate([{ $sample: { size: 25 } }])
       .toArray();
     if (randomMovies && randomTvShows) {
       result.push(randomTvShows, randomMovies);
@@ -195,6 +195,27 @@ const getTvByIdPlot = async (req, res) => {
     const searchPlot = await db
       .collection("Top100TvShowsPlots")
       .find({ _id: tvId })
+      .toArray();
+
+    if (searchPlot.length > 0) {
+      return res.status(200).json({ status: 200, data: searchPlot });
+    }
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    client.close();
+  }
+};
+
+const getMovieByIdPlot = async (req, res) => {
+  const { movieId } = req.params;
+  const client = new MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+    const db = client.db("MovieComb");
+    const searchPlot = await db
+      .collection("Top100MoviesPlots")
+      .find({ _id: movieId })
       .toArray();
 
     if (searchPlot.length > 0) {
@@ -277,6 +298,7 @@ const getTvByIdGetSeasons = async (req, res) => {
     const getSeasons = await db
       .collection("Top100TvShowSeasons")
       .findOne({ _id: tvId });
+
     getSeasons
       ? res.status(200).json({ status: 200, data: getSeasons })
       : res.status(404).json({ status: 400, data: "No seasons" });
@@ -316,36 +338,16 @@ const getMovieByIdRecommendedList = async (req, res) => {
   }
 };
 
-const getMovieByIdPlot = async (req, res) => {
-  const { movieId } = req.params;
-  const client = new MongoClient(MONGO_URI, options);
-  try {
-    await client.connect();
-    const db = client.db("MovieComb");
-    const searchPlot = await db
-      .collection("Top100MoviesPlots")
-      .find({ _id: movieId })
-      .toArray();
-
-    if (searchPlot.length > 0) {
-      return res.status(200).json({ status: 200, data: searchPlot });
-    }
-  } catch (err) {
-    console.log(err.stack);
-  } finally {
-    client.close();
-  }
-};
-
 const getMovieByIdUpcoming = async (req, res) => {
-  console.log("here");
   const client = new MongoClient(MONGO_URI, options);
   try {
     await client.connect();
     const db = client.db("MovieComb");
-    const upcomingMovie = await db.getCollection("UpComingMovies");
-    console.log(upcomingMovie);
-    if (upcomingMovie) {
+    const upcomingMovie = await db
+      .collection("UpComingMovies")
+      .find()
+      .toArray();
+    if (upcomingMovie.length > 0) {
       return res.status(200).json({ status: 200, data: upcomingMovie });
     } else {
       return res.status(404).json({ status: 404, data: "No upcoming list" });
@@ -358,14 +360,15 @@ const getMovieByIdUpcoming = async (req, res) => {
 };
 
 const getTvByIdUpcoming = async (req, res) => {
-  console.log("here");
   const client = new MongoClient(MONGO_URI, options);
   try {
     await client.connect();
     const db = client.db("MovieComb");
-    const upcomingTvShows = await db.getCollection("UpComingTvShows");
-    console.log(upcomingTvShows);
-    if (upcomingTvShows) {
+    const upcomingTvShows = await db
+      .collection("UpComingTvShows")
+      .find()
+      .toArray();
+    if (upcomingTvShows.length > 0) {
       return res.status(200).json({ status: 200, data: upcomingTvShows });
     } else {
       return res.status(404).json({ status: 404, data: "No upcoming list" });
