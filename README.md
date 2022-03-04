@@ -19,7 +19,7 @@ Filter page with filtering
 ![filter3](https://user-images.githubusercontent.com/6544696/156792248-0ef482ca-9ee8-44d4-9c6b-80c5b778d949.png)
 
 Browse page with pagination
-![Browse](https://user-images.githubusercontent.com/6544696/156792301-b6b060c0-90e1-49db-a6e3-219c3822f7da.png)
+![browsepage3](https://user-images.githubusercontent.com/6544696/156812565-483801a5-d7aa-4627-a17c-93112e934ae5.png)
 
 Browse page with pagination
 ![Browse2](https://user-images.githubusercontent.com/6544696/156792348-232f18d8-1dd4-4cec-b3a7-369ab0eacaf5.png)
