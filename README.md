@@ -24,3 +24,8 @@ Browse page with pagination
 Browse page with pagination
 ![Browse2](https://user-images.githubusercontent.com/6544696/156792348-232f18d8-1dd4-4cec-b3a7-369ab0eacaf5.png)
 
+Tv show page
+![Tvpage](https://user-images.githubusercontent.com/6544696/156812070-44b638de-ef9a-4398-9742-99aedd468904.png)
+
+Movie show page
+![Moviepage](https://user-images.githubusercontent.com/6544696/156812091-8ce33a8c-741b-4045-baa1-3b310bf56793.png)
